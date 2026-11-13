@@ -6,9 +6,24 @@
 <style>
 :root{font-family:system-ui,Arial,sans-serif;color-scheme:dark}body{margin:0;background:#081221;color:#e8f2ff}header{padding:25px 5%;border-bottom:1px solid #28415c}h1{margin:0}header p{color:#9ab4d3}main{padding:24px 5%}.card{background:#101f35;border:1px solid #2b4261;border-radius:14px;padding:22px}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{display:block;margin:0 0 8px;color:#a8c2df}select,input,button{padding:11px;border-radius:7px;background:#1a314e;color:#fff;border:1px solid #426081}button{background:#3279db;cursor:pointer}button:disabled{opacity:.6}#chart{height:510px}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.stat{padding:15px;background:#182d49;border-radius:10px;min-width:155px}.stat b{display:block;font-size:21px;margin-top:6px}small{color:#9ab4d3}a{color:#90c9ff}
 #surface-map{height:420px;background:#07101a;border-radius:10px;margin-top:14px}.surface-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.surface-controls input{width:112px}.surface-panel{margin-top:24px}#surface-note{color:#a8c2df} .leaflet-container{background:#091422} .leaflet-control-attribution{font-size:10px}
+
+/* Shared navigation across all Lunar Navigator pages */
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+.site-nav{position:sticky;top:0;z-index:1100;display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:12px 4%;background:#0c1b30;border-bottom:1px solid #355171;box-shadow:0 5px 15px #0003}
+.site-nav a{color:#c9def5!important;text-decoration:none!important;display:inline-flex;align-items:center;padding:10px 13px;border:1px solid transparent;border-radius:9px;font-size:14px;line-height:1.3;transition:background .15s}
+.site-nav a:hover,.site-nav a:focus-visible{background:#203b5b;outline:1px solid #668abd}
+.site-nav a[aria-current="page"],.site-nav a[aria-current="location"]{background:#254e7d;border-color:#588cc9;color:#fff!important;font-weight:650}
+@media(max-width:640px){.site-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding:9px 4%}.site-nav a{white-space:nowrap;font-size:12px;padding:9px 10px}}
 </style></head>
 <body><header><h1>🌙 Lunar Navigator</h1><p>Interactive moon orbit visualizer · NASA/JPL Horizons</p></header>
-<main><p><a href="/landing" style="display:inline-block;padding:12px 17px;background:#31866a;border-radius:10px;color:#fff;text-decoration:none;margin-right:10px">🚀 Space Apps: Compare lunar landing sites →</a></p><p><a href="/surface" style="display:inline-block;padding:12px 17px;background:#245e9a;border-radius:10px;color:#fff;text-decoration:none">🌕 Explore Apollo landing sites on the 3D Moon globe →</a></p><div class="card"><div class="controls">
+<nav class="site-nav" aria-label="Main navigation">
+  <a href="/" data-page="orbit" aria-current="page">🪐 Orbit Explorer</a>
+  <a href="/#surface-location" data-page="map">🗺️ Surface Map</a>
+  <a href="/surface" data-page="globe">🌕 3D Moon & Apollo</a>
+  <a href="/landing" data-page="landing">🚀 Landing Site Planner</a>
+  <a href="/docs" data-page="api">⚙️ API Docs</a>
+</nav>
+<main><div id="orbit"></div><p><a href="/landing" style="display:inline-block;padding:12px 17px;background:#31866a;border-radius:10px;color:#fff;text-decoration:none;margin-right:10px">🚀 Space Apps: Compare lunar landing sites →</a></p><p><a href="/surface" style="display:inline-block;padding:12px 17px;background:#245e9a;border-radius:10px;color:#fff;text-decoration:none">🌕 Explore Apollo landing sites on the 3D Moon globe →</a></p><div class="card"><div class="controls">
 <div><label for="body">Moon</label><select id="body"></select></div>
 <div><label for="start">Start time (UTC)</label><input type="datetime-local" id="start"></div>
 <div><label for="hours">Duration</label><select id="hours"><option value="6">6 hours</option><option value="24" selected>1 day</option><option value="72">3 days</option><option value="168">7 days</option></select></div>
@@ -18,7 +33,7 @@
 <div class="stat">Distance<b id="distance">—</b></div>
 <div class="stat">Orbital speed<b id="speed">—</b></div></div>
 <div id="chart"></div><small>The parent body's center is (0,0,0). Reference ephemerides, not live navigation or spacecraft tracking. Units: km and km/s.</small></div>
-<section class="card surface-panel" aria-label="Lunar surface map">
+<section id="surface-location" class="card surface-panel" aria-label="Lunar surface map">
 <h2>Surface map &amp; selected location</h2>
 <p id="surface-note">Select a surface point by clicking the map or entering selenographic coordinates. The marker is independent of the Moon’s orbital position.</p>
 <div class="surface-controls">
