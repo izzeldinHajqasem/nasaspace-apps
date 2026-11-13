@@ -41,3 +41,19 @@ These are preliminary comparisons among three areas, not a global optimization o
 - Approximate physical constants: NASA/JPL planetary satellite fact tables. Custom targets require a valid Horizons ID, mean radius, and GM.
 
 Not affiliated with NASA. No software license is assigned by this export; the texture retains its stated license.
+
+## Source layout
+
+- `src/index.html`: page structure and input controls.
+- `src/styles.css`: layout, typography, colors, and responsive rules.
+- `src/app.js`: destination data, interactive map, physical estimates, and single-site analysis.
+- `src/mission-model.js`: shared candidate data, mission-fit rules, and scoring.
+- `src/recommendations.js`: recommendation controls, live sampling, ranked cards, and export.
+- `src/worker.template.mjs`: HTTP routes and NASA JPL Horizons requests/parsing.
+- `build.py`: bundles the page assets and lunar texture into one deployable Worker.
+- `serve.mjs`: local Node HTTP adapter for the Worker.
+- `tests/`: calculation/API checks and recommendation scoring checks.
+
+The build embeds CSS and scripts for deployment; edit the readable source files instead of generated `dist/` files. The scripts load in order because recommendation controls reuse the map and mission helpers.
+
+Format the JavaScript, HTML, CSS, and Markdown with `npx --yes prettier@3.6.2 --write src/ serve.mjs tests/ README.md`.

@@ -1,35 +1,297 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lunar Landing Site Navigator</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
-:root{--bg:#101313;--panel:#191d1c;--line:#303633;--muted:#939e97;--lime:#d6f87b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#edf0e9;font:14px 'DM Sans',sans-serif}button,input,select{font:inherit}button,a,select{cursor:pointer}button{color:inherit}header{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 36px;gap:15px}.logo{border:1px solid var(--lime);border-radius:50%;width:35px;height:35px;display:grid;place-items:center;color:var(--lime);font-size:24px}header b{font:600 19px 'Space Grotesk';letter-spacing:2px}header small{color:var(--muted);font-size:10px;letter-spacing:2px}nav{margin:auto;display:flex;gap:32px}nav a{color:var(--muted);text-decoration:none}nav a.active{color:var(--lime)}.badge{font-size:11px;border:1px solid var(--line);padding:8px 12px;border-radius:20px;color:var(--lime)}main{padding:32px 36px}.intro{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--lime);margin-bottom:10px}h1{font:500 34px 'Space Grotesk';margin:0 0 8px}p{color:var(--muted);line-height:1.6;margin:0}.btn{background:var(--lime);color:#17200c;border:0;border-radius:7px;padding:12px 18px;font-weight:700}.outline{background:transparent;border:1px solid var(--line);color:#e5e9df}.workspace{display:grid;grid-template-columns:270px minmax(400px,1fr) 280px;gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}.section{padding:20px;border-bottom:1px solid var(--line)}h2{font:500 15px 'Space Grotesk';margin:0 0 18px}label{display:block;font-size:11px;color:var(--muted);margin:15px 0 7px}input,select{width:100%;padding:10px;background:#111514;border:1px solid #3a423b;border-radius:5px;color:#e6ebdf}input:focus,select:focus{outline:1px solid var(--lime)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tiny{font-size:11px;color:var(--muted);line-height:1.6}.wide{width:100%;margin-top:18px}.maphead{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line)}.maphead strong{font:500 16px 'Space Grotesk'}.tag{font-size:10px;color:var(--muted);letter-spacing:1px}.mapbox{position:relative;height:450px;background:#080b09;overflow:hidden}canvas{width:100%;height:100%;display:block;cursor:crosshair}.maplabel{position:absolute;left:18px;top:17px;font-size:10px;letter-spacing:2px;background:#111a; padding:8px;pointer-events:none}.mapcontrols{position:absolute;right:16px;top:16px;display:grid;gap:6px}.mapcontrols button{background:#161b17;border:1px solid #4a5248;border-radius:5px;width:33px;height:33px;font-size:19px}.legend{position:absolute;bottom:15px;left:18px;font-size:10px;background:#101610bd;padding:8px 12px;border-radius:5px;color:#bbc6b2;pointer-events:none}.mapfoot{padding:13px 18px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);gap:12px}.sitebar{margin:16px 0 0;padding:20px;display:flex;align-items:center;justify-content:space-between}.sitebar b{font:500 17px 'Space Grotesk'}.dot{display:inline-block;width:6px;height:6px;background:var(--lime);border-radius:50%;margin-right:7px}.metric{padding:17px 0;border-bottom:1px solid var(--line)}.metric:last-child{border:0}.metric .value{font:500 28px 'Space Grotesk';margin:7px 0}.metric .value small{font:12px 'DM Sans';color:var(--muted)}.metric .top{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}.note{background:#252d1d;border:1px solid #46522f;color:#c0cdaa;padding:12px;border-radius:6px;font-size:11px;line-height:1.6}.bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:18px}.stat{padding:20px}.stat .num{font:500 25px 'Space Grotesk';margin:12px 0 5px}.num span{font:12px 'DM Sans';color:var(--muted)}footer{display:flex;justify-content:space-between;color:#7e897f;font-size:10px;padding:24px 0}.status{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6}.presets{display:flex;gap:6px;flex-wrap:wrap}.presets button{font-size:10px;padding:6px 8px;border:1px solid var(--line);background:none;border-radius:4px}dialog{background:var(--panel);color:#eee;border:1px solid var(--line);border-radius:12px;max-width:640px;padding:28px}dialog p{margin:14px 0}a{color:var(--lime)}@media(min-width:1600px){main{max-width:1700px;margin:auto}.mapbox{height:520px}}@media(max-width:1150px){.workspace{grid-template-columns:240px 1fr}.results{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.mapbox{height:440px}nav{display:none}}@media(max-width:730px){header{padding:0 18px}header .badge{display:none}main{padding:24px 16px}.intro{align-items:start;gap:15px}h1{font-size:27px}.intro .btn{font-size:11px;padding:10px}.workspace,.bottom{display:block}.panel{margin-bottom:14px}.results{display:block}.mapbox{height:330px}.sitebar{gap:15px}footer{gap:20px}}
-textarea{width:100%;resize:vertical;background:#111514;color:#e6ebdf;border:1px solid #3a423b;border-radius:5px;padding:10px;font:inherit}.recommend-card{padding:18px;border:1px solid var(--line);border-radius:8px;margin-top:12px}.recommend-card h3{font:500 18px "Space Grotesk";margin:0 0 10px}.recommend-card p{margin:9px 0}.recscore{color:var(--lime);font-size:12px}.planner-results{padding:20px;margin-bottom:16px}</style></head><body><header><div class="logo">◒</div><div><b>SELENE</b><br><small>MISSION DESIGN LAB</small></div><nav><a class="active" href="#">Site navigator</a><a href="#" id="guide">Mission guide ↗</a><a href="#" id="sources">Data & methodology ↗</a></nav><span class="badge">✦ NASA SPACE APPS CONCEPT</span></header><main><div class="intro"><div><div class="eyebrow">EXPLORE / ANALYZE / PLAN</div><h1>Lunar Landing Site Navigator</h1><p>Every great mission starts with the right place to land.</p></div><button id="export" class="btn outline">↓ &nbsp; Export mission</button></div><div class="workspace"><aside class="panel"><div class="section"><h2>01 &nbsp; Mission brief</h2><label for="body">Destination</label><select id="body"></select><div id="custom" hidden><label>Horizons satellite ID<input id="cid" placeholder="e.g. 555" inputmode="numeric"></label><div class="pair"><label>Radius · km<input id="cr" type="number" min="0.001" step="any"></label><label>GM · km³/s²<input id="cmu" type="number" min="0.000001" step="any"></label></div></div><label for="purpose">Mission purpose</label><select id="purpose"><option value="science">Scientific exploration</option><option value="resources">Water & resource scouting</option><option value="technology">Technology demonstration</option><option value="habitat">Long-term habitat scouting</option></select><label for="aim">What do you want to achieve?</label><textarea id="aim" rows="3" maxlength="1200" placeholder="e.g. Find water ice and test a solar-powered rover">Find water ice and collect geological samples</textarea><div class="pair"><div><label for="duration">Duration · Earth days</label><input id="duration" type="number" min="1" max="3650" step="1" value="14"></div><div><label for="power">Power source</label><select id="power"><option value="solar">Solar</option><option value="independent">Independent</option></select></div></div><label for="date">Mission epoch · UTC</label><input id="date" type="datetime-local" value="2026-11-13T00:00"><div class="pair"><div><label for="lat">Latitude · °N</label><input id="lat" type="number" min="-90" max="90" step="0.001" value="0.674"></div><div><label for="lon">Longitude · °E</label><input id="lon" type="number" min="-180" max="180" step="0.001" value="23.473"></div></div><button id="recommend" class="btn wide">Find landing options ↗</button><label>Explore historic sites</label><div class="presets"><button data-site="0.674,23.473,Apollo 11">Apollo 11</button><button data-site="-3.012,-23.422,Apollo 12">Apollo 12</button><button data-site="-85.4,30,South polar region">South pole</button></div></div><div class="section"><h2>02 &nbsp; Vehicle parameters</h2><label for="alt">Circular orbit altitude · km</label><input id="alt" type="number" min="0" step="1" value="100"><div class="pair"><div><label for="mass">Dry mass · kg</label><input id="mass" type="number" min="1" value="1500"></div><div><label for="isp">Engine Isp · s</label><input id="isp" type="number" min="1" value="320"></div></div><label for="dv">Mission Δv budget · m/s</label><input id="dv" type="number" min="0" value="2000"><button class="btn wide" id="analyze">Analyze landing site &nbsp; ↗</button><div id="status" class="status">Ready to query NASA JPL Horizons.</div></div></aside><div><section class="panel planner-results"><div class="eyebrow">MISSION-MATCHED SHORTLIST</div><h2>Where should your mission land?</h2><p id="recstatus" aria-live="polite">Describe your mission, choose a destination, and find landing options.</p><div id="recommendations"></div><p class="tiny" style="margin-top:14px">Ranked among three candidate areas, not every location. Science fit uses disclosed illustrative heuristics, not terrain analysis. Horizons samples 25 times across your duration; percentages are sampled geometry, not guaranteed power or communication availability. Other bodies use exploratory coordinates when no curated areas exist. No local shadows, eclipses, weather, radiation, or landing safety assessment. Gas giants have no solid landing surface and are excluded.</p></section><section class="panel"><div class="maphead"><strong id="maptitle">The Moon <span style="color:#89917f">/ Surface explorer</span></strong><span class="tag">EQUIRECTANGULAR</span></div><div class="mapbox"><canvas id="map" aria-label="Interactive moon surface map. Click to select coordinates; coordinate inputs also available."></canvas><div class="maplabel" id="maplabel">LUNAR GLOBAL MOSAIC</div><div class="mapcontrols"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="reset" aria-label="Reset map">⌖</button></div><div class="legend"><span class="dot"></span>Selected site &nbsp; + &nbsp; Historic landing sites</div></div><div class="mapfoot"><span id="credit">Imagery: Solar System Scope · CC BY 4.0</span><span id="zoom">1.0× &nbsp; / &nbsp; Click map to select a site</span></div></section><section class="panel sitebar"><div><div class="eyebrow">SELECTED LANDING SITE</div><b id="sitename">Apollo 11 · Sea of Tranquility</b><p class="tiny" id="coords">0.674° N &nbsp; 23.473° E</p></div><span class="badge">◎ &nbsp; SURFACE TARGET</span></section><div class="bottom"><div class="panel stat"><span class="tiny">SURFACE GRAVITY</span><div class="num" id="gravity">1.625 <span>m/s²</span></div><p class="tiny">Spherical-body estimate</p></div><div class="panel stat"><span class="tiny">ESCAPE VELOCITY</span><div class="num" id="escape">2.376 <span>km/s</span></div><p class="tiny">At mean surface radius</p></div><div class="panel stat"><span class="tiny">ORBITAL PERIOD</span><div class="num" id="period">117.8 <span>min</span></div><p class="tiny">At selected orbit altitude</p></div></div></div><aside class="panel results"><div class="section"><h2>Site conditions <span style="color:var(--lime)">↗</span></h2><div class="tiny">NASA / JPL HORIZONS</div><div class="metric"><div class="top">Solar elevation <span>☀</span></div><div class="value" id="sun">— <small>deg</small></div><p class="tiny" id="sunhint">Analyze to retrieve illumination</p></div><div class="metric"><div class="top">Earth elevation <span>◉</span></div><div class="value" id="earth">— <small>deg</small></div><p class="tiny" id="earthhint">Geometric line of sight</p></div><div class="metric"><div class="top">Earth range <span>↔</span></div><div class="value" id="range">— <small>km</small></div><p class="tiny" id="delay">One-way light time: —</p></div></div><div class="section"><h2>Mission estimates</h2><div class="metric"><div class="top">Circular orbit velocity</div><div class="value" id="velocity">1.633 <small>km/s</small></div></div><div class="metric"><div class="top">Ideal propellant required</div><div class="value" id="fuel">1,337 <small>kg</small></div><p class="tiny">Rocket equation · selected Δv</p></div><div class="note">Concept planning only. Terrain slope, hazards, local shadows, eclipses, atmosphere, and landing losses are not modeled.</div></div></aside></div><footer><span>SELENE / A NASA Space Apps Challenge project concept · Not affiliated with NASA</span><span>JPL Horizons ephemerides &nbsp; · &nbsp; Planetary exploration, made accessible.</span></footer></main><dialog id="info"><h2 id="ititle"></h2><div id="itext"></div><button class="btn" onclick="document.querySelector('dialog').close()">Back to navigator</button></dialog><script>
-const bodies=[['Moon','Earth',301,1737.4,4902.800118,'moon'],['Phobos','Mars',401,11.266,0.0007087],['Deimos','Mars',402,6.2,0.0000962],['Io','Jupiter',501,1821.6,5959.916],['Europa','Jupiter',502,1560.8,3202.739],['Ganymede','Jupiter',503,2634.1,9887.834],['Callisto','Jupiter',504,2410.3,7179.289],['Mimas','Saturn',601,198.2,2.5026],['Enceladus','Saturn',602,252.1,7.2104],['Tethys','Saturn',603,531.1,41.21],['Dione','Saturn',604,561.4,73.112],['Rhea','Saturn',605,763.8,153.94],['Titan','Saturn',606,2574.73,8978.138],['Iapetus','Saturn',608,734.5,120.51],['Miranda','Uranus',705,235.8,4.4],['Ariel','Uranus',701,578.9,86.4],['Umbriel','Uranus',702,584.7,81.5],['Titania','Uranus',703,788.9,228.2],['Oberon','Uranus',704,761.4,192.4],['Triton','Neptune',801,1353.4,1427.6],['Charon','Pluto',901,606,105.88],['Other moon / custom target','Solar system',0,0,0]];
-bodies.splice(bodies.length-1,0,['Mercury','Rocky planet',199,2439.7,22031.8686],['Venus','Rocky planet',299,6051.8,324858.592],['Mars','Rocky planet',499,3389.5,42828.375],['Pluto','Dwarf planet',999,1188.3,869.6138]);
-const $=id=>document.getElementById(id);bodies.forEach((b,i)=>$('body').add(new Option(b[0]+' · '+b[1],i)));let selectedName='Apollo 11 · Sea of Tranquility',z=1,center=[0,0],image=new Image(),imageReady=false,last=null,seq=0;const canvas=$('map'),ctx=canvas.getContext('2d');image.onload=()=>{imageReady=true;draw()};image.onerror=()=>{$('credit').textContent='Imagery unavailable · coordinate grid';draw()};image.src='/moon.jpg';
-function body(){let b=bodies[+$('body').value];return b[2]?b:['Custom moon','Custom',+$('cid').value,+$('cr').value,+$('cmu').value]}
-function valid(){for(const id of ['lat','lon','alt','mass','isp','dv','date',...(bodies[+$('body').value][2]?[]:['cid','cr','cmu'])]){let e=$(id);if(!e.value||!e.reportValidity())throw Error('Enter valid mission parameters.')}let b=body();if(!Number.isInteger(b[2])||b[2]<1||b[3]<=0||b[4]<=0)throw Error('Enter a satellite ID, positive radius, and positive GM.');return b}
-function physics(){try{let b=valid(),r=b[3],mu=b[4],a=r+(+$('alt').value),v=Math.sqrt(mu/a),t=2*Math.PI*Math.sqrt(a*a*a/mu)/60,f=(+$('mass').value)*Math.expm1((+$('dv').value)/(9.80665*(+$('isp').value)));$('gravity').innerHTML=(mu/r/r*1000).toFixed(3)+' <span>m/s²</span>';$('escape').innerHTML=Math.sqrt(2*mu/r).toFixed(3)+' <span>km/s</span>';$('period').innerHTML=t.toFixed(1)+' <span>min</span>';$('velocity').innerHTML=v.toFixed(3)+' <small>km/s</small>';$('fuel').innerHTML=Math.round(f).toLocaleString()+' <small>kg</small>';return{gravity:mu/r/r*1000,escape_kms:Math.sqrt(2*mu/r),orbit_kms:v,period_min:t,propellant_kg:f}}catch(e){return null}}
-function clearLive(){seq++;last=null;for(let id of ['sun','earth','range'])$(id).textContent='—';$('sunhint').textContent='Analyze to retrieve illumination';$('earthhint').textContent='Geometric line of sight';$('delay').textContent='One-way light time: —';$('status').textContent='Parameters changed. Analyze to refresh Horizons data.'}
-function position(){let lat=+$('lat').value,lon=+$('lon').value;$('coords').textContent=Math.abs(lat).toFixed(3)+'° '+(lat<0?'S':'N')+'   '+Math.abs(lon).toFixed(3)+'° '+(lon<0?'W':'E');$('sitename').textContent=selectedName;draw()}
-function draw(){let w=canvas.clientWidth,h=canvas.clientHeight,dpr=devicePixelRatio||1;canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.fillStyle='#0c100e';ctx.fillRect(0,0,w,h);let bounds=()=>[center[0]-180/z,center[1]+90/z,360/z,180/z];let [left,top,span,vspan]=bounds();let px=lon=>(lon-left)/span*w,py=lat=>(top-lat)/vspan*h; if(body()[2]===301&&imageReady){ctx.globalAlpha=.85;ctx.drawImage(image,(left+180)/360*image.width,(90-top)/180*image.height,span/360*image.width,vspan/180*image.height,0,0,w,h);ctx.globalAlpha=1}ctx.strokeStyle='#d4e4b52b';ctx.lineWidth=.6;ctx.fillStyle='#d2dbc280';ctx.font='9px monospace';for(let x=-180;x<=180;x+=30){ctx.beginPath();ctx.moveTo(px(x),0);ctx.lineTo(px(x),h);ctx.stroke();ctx.fillText(x+'°',px(x)+4,h-8)}for(let y=-90;y<=90;y+=30){ctx.beginPath();ctx.moveTo(0,py(y));ctx.lineTo(w,py(y));ctx.stroke();ctx.fillText(y+'°',5,py(y)-5)}if(body()[2]===301){for(let [la,lo,name] of [[0.674,23.473,'APOLLO 11'],[-3.012,-23.422,'APOLLO 12'],[26.132,3.634,'APOLLO 15']]){ctx.fillStyle='#dde3ce';ctx.fillText('+',px(lo)-3,py(la)+3);ctx.font='8px monospace';ctx.fillText(name,px(lo)+9,py(la)-8)}}let x=px(+$('lon').value),y=py(+$('lat').value);ctx.strokeStyle='#d6f87b';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,16,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#d6f87b';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(x-25,y);ctx.lineTo(x-9,y);ctx.moveTo(x+9,y);ctx.lineTo(x+25,y);ctx.moveTo(x,y-25);ctx.lineTo(x,y-9);ctx.moveTo(x,y+9);ctx.lineTo(x,y+25);ctx.stroke();if(body()[2]!==301){ctx.fillStyle='#b0bfa5';ctx.font='12px sans-serif';ctx.fillText('COORDINATE GRID · NO SURFACE IMAGERY',18,50)}$('zoom').textContent=z.toFixed(1)+'× / Click map to select a site'}
-canvas.onclick=e=>{let r=canvas.getBoundingClientRect();$('lon').value=(center[0]+((e.clientX-r.left)/r.width-.5)*360/z).toFixed(3);$('lat').value=(center[1]+(.5-(e.clientY-r.top)/r.height)*180/z).toFixed(3);selectedName='Custom landing site';clearLive();position()};function zoom(f){z=Math.max(1,Math.min(8,z*f));center=z===1?[0,0]:[Math.max(-180+180/z,Math.min(180-180/z,+$('lon').value)),Math.max(-90+90/z,Math.min(90-90/z,+$('lat').value))];draw()}$('zin').onclick=()=>zoom(2);$('zout').onclick=()=>zoom(.5);$('reset').onclick=()=>{z=1;center=[0,0];draw()};window.addEventListener('resize',draw);
-document.querySelectorAll('[data-site]').forEach(btn=>btn.onclick=()=>{$('body').value='0';changeBody();let [la,lo,n]=btn.dataset.site.split(',');$('lat').value=la;$('lon').value=lo;selectedName=n;clearLive();position()});function changeBody(){let b=body();$('custom').hidden=!!bodies[+$('body').value][2];$('maptitle').textContent=b[0]+' / Surface explorer';$('maplabel').textContent=b[2]===301?'LUNAR GLOBAL MOSAIC':'PLANETARY COORDINATE GRID';$('credit').textContent=b[2]===301?'Imagery: Solar System Scope · CC BY 4.0':'No global image included for this body';selectedName='Custom landing site';clearLive();physics();position()}$('body').onchange=changeBody;for(let id of ['lat','lon','alt','mass','isp','dv','date','cid','cr','cmu'])$(id).addEventListener('change',()=>{clearLive();physics();if(id==='lat'||id==='lon')selectedName='Custom landing site';position()});
-async function analyze(){let b;try{b=valid()}catch(e){$('status').textContent=e.message;return}let n=++seq;last=null;physics();$('analyze').disabled=true;$('analyze').textContent='Querying Horizons…';$('status').textContent='Fetching Sun and Earth ephemerides…';try{const res=await fetch('/api/horizons?'+new URLSearchParams({body:b[2],lat:$('lat').value,lon:$('lon').value,date:$('date').value}));const data=await res.json();if(!res.ok)throw Error(data.error||'Horizons request failed');if(n!==seq)return;last=data;let s=data.sun,e=data.earth;$('sun').innerHTML=s.elevation.toFixed(2)+' <small>deg</small>';$('sunhint').textContent=s.elevation>0?'Sun above geometric horizon':'Sun below geometric horizon';$('earth').innerHTML=e.elevation.toFixed(2)+' <small>deg</small>';$('earthhint').textContent=e.elevation>0?'Earth above geometric horizon':'Earth below geometric horizon';$('range').innerHTML=Math.round(e.rangeAU*149597870.7).toLocaleString()+' <small>km</small>';$('delay').textContent='One-way light time: '+(e.rangeAU*499.00478).toFixed(2)+' s';$('status').innerHTML='<span class="dot"></span>Horizons data retrieved · '+data.epoch+' UTC';}catch(err){if(n===seq){$('status').textContent='Live data unavailable: '+err.message+' Try another epoch or supported target.'}}finally{$('analyze').disabled=false;$('analyze').textContent='Analyze landing site ↗'}}$('analyze').onclick=analyze;
-$('export').onclick=()=>{try{let b=valid();let report={application:'SELENE',target:b[0],horizons_id:b[2],epoch_utc:$('date').value,site:{latitude_deg:+$('lat').value,longitude_east_deg:+$('lon').value},inputs:{mean_radius_km:b[3],GM_km3_s2:b[4],altitude_km:+$('alt').value,dry_mass_kg:+$('mass').value,isp_s:+$('isp').value,delta_v_ms:+$('dv').value},estimates:physics(),horizons:last,limitations:'Spherical body; no terrain, local shadows, eclipse assessment, atmospheric or landing losses. Concept use only.'};let url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='selene-mission.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){$('status').textContent=e.message}};
-function info(title,html){$('ititle').textContent=title;$('itext').innerHTML=html;$('info').showModal()}$('guide').onclick=e=>{e.preventDefault();info('Plan your mission','<p>Start with a mission purpose, aim, duration in Earth days, and power source. Find landing options compares three areas, then lets you explore each on the map. Aim keywords adjust resource, science, demonstration, and habitat fit. Scores are illustrative, not probability of success.</p><p>1. Choose a moon and UTC epoch. Click the map or enter east-positive longitude and latitude.</p><p>2. Set a circular orbit altitude, dry vehicle mass, engine specific impulse, and your own Δv budget.</p><p>3. Analyze to request Sun and Earth azimuth, elevation, and range from JPL Horizons. Export a JSON mission brief.</p><p>For other moons, choose a custom Horizons satellite ID and enter published mean radius and GM. Horizons support and date ranges vary by target; missing imagery is shown as a grid.</p>')};$('sources').onclick=e=>{e.preventDefault();info('Data & methodology','<p><a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">NASA JPL Horizons</a> supplies live observer ephemerides for the Sun and Earth, centered on your geodetic surface coordinate (0 km height). East-positive longitude, UTC; geometric horizon with no refraction. Results do not account for local topography or occultation of Earth by another body.</p><p>Lunar image: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a>, CC BY 4.0, global equirectangular texture. This is a visual atlas, not a calibrated terrain or hazard product. No elevation data is included.</p><p>Body constants are approximate mean-radius and gravitational-parameter values from NASA/JPL planetary satellite fact tables. Small irregular moons use a spherical approximation. Custom inputs support other Horizons-recognized moons; unavailable rotation models may prevent surface ephemerides.</p><p>g = μ/r²; v = √(μ/(r+h)); T = 2π√((r+h)³/μ). Ideal propellant = dry mass × [exp(Δv/(9.80665 × Isp)) − 1]. The entered Δv is a mission assumption, not a computed landing trajectory.</p>')};const catalogue={
-301:[['Shackleton rim region',-89.5,0,[1,.55,.9,.8],'Polar volatile science; rugged terrain and local shadow require high-resolution validation.'],['Oceanus Procellarum',18,-57,[.2,.9,.65,.75],'Basaltic plains support volcanic and geologic investigations; local hazards unassessed.'],['Mare Tranquillitatis',.674,23.473,[.15,.75,.95,.6],'Historic landing region for technology demonstrations; lunar night requires power storage.']],
-499:[['Jezero crater',18.38,77.58,[.45,1,.65,.7],'Ancient delta deposits make a compelling past-habitability target; planetary protection applies.'],['Elysium Planitia',4.5,135.9,[.3,.6,.95,.6],'Broad plains suit geophysics and technology demonstrations; landing hazards still require mapping.'],['Arcadia Planitia',40,-170,[1,.7,.65,.85],'Midlatitude subsurface ice is a resource-science motivation; ice access is unverified at this coordinate.']],
-502:[['Leading-hemisphere ice',0,90,[.8,.9,.4,.7],'Icy surface science; severe radiation, contamination control, and unresolved landing hazards.'],['Equatorial trailing hemisphere',0,-90,[.65,.85,.35,.65],'Surface chemistry target; severe radiation environment and unknown terrain.'],['High-latitude ice',60,0,[.8,.8,.3,.6],'Compare latitude-dependent ice processes; no validated landing terrain.']],
-602:[['South polar terrain',-80,0,[1,1,.3,.6],'Plume-related ice science; active terrain and planetary protection need dedicated assessment.'],['Equatorial ice',0,60,[.65,.7,.55,.6],'Comparative ice geology; no calibrated landing hazards included.'],['Northern terrain',60,0,[.6,.65,.5,.55],'Regional ice comparison; surface properties remain poorly constrained.']],
-606:[['Shangri-La region',-10,164,[.5,.85,.65,.6],'Dune and organic chemistry science; dense atmosphere needs an entry/descent model.'],['Equatorial terrain',0,30,[.45,.75,.6,.6],'Organic surface science; no landing suitability or weather assessment.'],['Northern lake region',75,100,[.8,1,.25,.7],'Methane-cycle science; liquid-surface landing requires a specialized vehicle.']]
-};
-function objectives(purpose,aim){const t=aim.toLowerCase();let w={resources:[1,.2,.2,.8],science:[.3,1,.3,.4],technology:[.1,.3,1,.3],habitat:[.8,.3,.7,1]}[purpose].slice();if(/ice|water|resource|fuel/.test(t))w[0]+=1;if(/life|geolog|sample|science|bio|crater/.test(t))w[1]+=1;if(/test|robot|rover|demo|instrument/.test(t))w[2]+=1;if(/base|habitat|crew|settle|long.term/.test(t))w[3]+=1;return w}
-function candidates(id){return (catalogue[id]||[['Equatorial reference area',0,0,[.5,.5,.5,.5],'Exploratory coordinate only; no geology or terrain suitability evidence.'],['Midlatitude reference area',35,90,[.5,.5,.5,.5],'Exploratory coordinate only; compare lighting and Earth visibility.'],['High-latitude reference area',70,-90,[.5,.5,.5,.5],'Exploratory coordinate only; no resource or safety inference.']]).map(([name,lat,lon,fit,note])=>({name,lat,lon,fit,note,curated:!!catalogue[id]}))}
-function scoreSite(site,weights,days,power){const science=site.fit.reduce((s,v,i)=>s+v*weights[i],0)/weights.reduce((s,v)=>s+v,0);const lightWeight=power==='solar'?(days>14?.4:.3):.1,commWeight=.15;let available=site.light!==undefined&&site.comm!==undefined;return {...site,score:available?Math.round(100*((1-lightWeight-commWeight)*science+lightWeight*site.light+commWeight*site.comm)):Math.round(science*100),basis:available?'Mission fit + sampled Horizons geometry':'Mission-fit heuristic only',scienceFit:Math.round(science*100)}}
-
-let recommendationRun=0,recommendationReport=null;
-function staleRecommendations(){recommendationRun++;recommendationReport=null;$('recommendations').innerHTML='';$('recstatus').textContent='Brief changed. Find landing options to refresh the ranking.'}
-for(const id of ['purpose','duration','aim','power','body','date','cid','cr','cmu'])$(id).addEventListener('change',staleRecommendations);
-$('recommend').onclick=async()=>{let b;try{b=valid();if(!$('duration').reportValidity()||!$('duration').value)throw Error('Enter a duration from 1 to 3650 days.');if(!$('aim').value.trim())throw Error('Describe the aim of your mission.')}catch(e){$('recstatus').textContent=e.message;return}const run=++recommendationRun,days=+$('duration').value,purpose=$('purpose').value,aim=$('aim').value.trim(),power=$('power').value,epoch=$('date').value;const weights=objectives(purpose,aim);$('recommend').disabled=true;$('recstatus').textContent='Comparing three candidate areas across the mission window…';$('recommendations').innerHTML='';recommendationReport=null;try{let sites=candidates(b[2]);for(let i=0;i<sites.length;i++){if(run!==recommendationRun)return;let s=sites[i];$('recstatus').textContent='Checking '+s.name+' ('+(i+1)+'/3)…';try{let r=await fetch('/api/horizons?'+new URLSearchParams({body:b[2],lat:s.lat,lon:s.lon,date:epoch,days})),d=await r.json();if(!r.ok)throw Error(d.error||'Horizons unavailable');s.light=d.sun.samples.filter(v=>v.elevation>0).length/d.sun.samples.length;s.comm=d.earth.samples.filter(v=>v.elevation>0).length/d.earth.samples.length;s.samples=d.sun.samples.length;s.minSun=Math.min(...d.sun.samples.map(v=>v.elevation));s.maxSun=Math.max(...d.sun.samples.map(v=>v.elevation));s.horizons=d}catch(e){s.error='Live geometry unavailable for this area; excluded from geometry ranking.'}}if(run!==recommendationRun)return;let allLive=sites.every(s=>s.light!==undefined&&s.comm!==undefined);let ranked=sites.map(s=>scoreSite(allLive?s:{...s,light:undefined,comm:undefined},weights,days,power)).sort((a,b)=>b.score-a.score);recommendationReport={target:b[0],epoch_utc:epoch,duration_days:days,purpose,aim,power,ranking_mode:allLive?'mission-fit-and-sampled-geometry':'mission-fit-only',candidates:ranked};$('recstatus').textContent=allLive?'Ranked for your brief using mission fit and '+ranked[0].samples+' geometry samples per candidate.':'Live geometry is incomplete. All candidates ranked using the same mission-fit-only method.';for(let [i,s] of ranked.entries()){let card=document.createElement('article');card.className='recommend-card';let title=document.createElement('h3');title.textContent=(i+1)+'. '+s.name;card.append(title);let score=document.createElement('div');score.className='recscore';score.textContent=s.score+'/100 · '+s.basis;card.append(score);let text=document.createElement('p');text.textContent=s.note;card.append(text);let detail=document.createElement('p');detail.className='tiny';detail.textContent=s.lat+'° N, '+s.lon+'° E · Mission fit '+s.scienceFit+'/100'+(s.horizons?' · Sun above horizon '+Math.round(s.horizons.sun.samples.filter(v=>v.elevation>0).length/s.samples*100)+'% · Earth above horizon '+Math.round(s.horizons.earth.samples.filter(v=>v.elevation>0).length/s.horizons.earth.samples.length*100)+'% of samples.': ' · Geometry unavailable.');card.append(detail);let btn=document.createElement('button');btn.className='btn outline';btn.textContent='Explore this site ↗';btn.onclick=()=>{$('lat').value=s.lat;$('lon').value=s.lon;selectedName=s.name;clearLive();position();$('reset').click();$('map').scrollIntoView({behavior:'smooth',block:'center'});analyze()};card.append(btn);$('recommendations').append(card)} }finally{$('recommend').disabled=false}};
-const originalExport=$('export').onclick;$('export').onclick=()=>{if(!recommendationReport){originalExport();return}let report={...recommendationReport,limitations:'Ranked shortlist, not a global optimum. Heuristic science fit; 25 time samples can miss nights, eclipses and communication gaps. No terrain, hazards, weather, radiation, atmospheric entry, or trajectory validation.'};let url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));let a=document.createElement('a');a.href=url;a.download='selene-landing-options.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
-
-physics();position();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Lunar Landing Site Navigator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">◒</div>
+      <div><b>SELENE</b><br /><small>MISSION DESIGN LAB</small></div>
+      <nav>
+        <a class="active" href="#">Site navigator</a
+        ><a href="#" id="guide">Mission guide ↗</a
+        ><a href="#" id="sources">Data & methodology ↗</a>
+      </nav>
+      <span class="badge">✦ NASA SPACE APPS CONCEPT</span>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">EXPLORE / ANALYZE / PLAN</div>
+          <h1>Lunar Landing Site Navigator</h1>
+          <p>Every great mission starts with the right place to land.</p>
+        </div>
+        <button id="export" class="btn outline">↓ &nbsp; Export mission</button>
+      </div>
+      <div class="workspace">
+        <aside class="panel">
+          <div class="section">
+            <h2>01 &nbsp; Mission brief</h2>
+            <label for="body">Destination</label
+            ><select id="body"></select>
+            <div id="custom" hidden>
+              <label
+                >Horizons satellite ID<input
+                  id="cid"
+                  placeholder="e.g. 555"
+                  inputmode="numeric"
+              /></label>
+              <div class="pair">
+                <label
+                  >Radius · km<input
+                    id="cr"
+                    type="number"
+                    min="0.001"
+                    step="any" /></label
+                ><label
+                  >GM · km³/s²<input
+                    id="cmu"
+                    type="number"
+                    min="0.000001"
+                    step="any"
+                /></label>
+              </div>
+            </div>
+            <label for="purpose">Mission purpose</label
+            ><select id="purpose">
+              <option value="science">Scientific exploration</option>
+              <option value="resources">Water & resource scouting</option>
+              <option value="technology">Technology demonstration</option>
+              <option value="habitat">
+                Long-term habitat scouting
+              </option></select
+            ><label for="aim">What do you want to achieve?</label
+            ><textarea
+              id="aim"
+              rows="3"
+              maxlength="1200"
+              placeholder="e.g. Find water ice and test a solar-powered rover"
+            >
+Find water ice and collect geological samples</textarea
+            >
+            <div class="pair">
+              <div>
+                <label for="duration">Duration · Earth days</label
+                ><input
+                  id="duration"
+                  type="number"
+                  min="1"
+                  max="3650"
+                  step="1"
+                  value="14"
+                />
+              </div>
+              <div>
+                <label for="power">Power source</label
+                ><select id="power">
+                  <option value="solar">Solar</option>
+                  <option value="independent">Independent</option>
+                </select>
+              </div>
+            </div>
+            <label for="date">Mission epoch · UTC</label
+            ><input id="date" type="datetime-local" value="2026-11-13T00:00" />
+            <div class="pair">
+              <div>
+                <label for="lat">Latitude · °N</label
+                ><input
+                  id="lat"
+                  type="number"
+                  min="-90"
+                  max="90"
+                  step="0.001"
+                  value="0.674"
+                />
+              </div>
+              <div>
+                <label for="lon">Longitude · °E</label
+                ><input
+                  id="lon"
+                  type="number"
+                  min="-180"
+                  max="180"
+                  step="0.001"
+                  value="23.473"
+                />
+              </div>
+            </div>
+            <button id="recommend" class="btn wide">
+              Find landing options ↗</button
+            ><label>Explore historic sites</label>
+            <div class="presets">
+              <button data-site="0.674,23.473,Apollo 11">Apollo 11</button
+              ><button data-site="-3.012,-23.422,Apollo 12">Apollo 12</button
+              ><button data-site="-85.4,30,South polar region">
+                South pole
+              </button>
+            </div>
+          </div>
+          <div class="section">
+            <h2>02 &nbsp; Vehicle parameters</h2>
+            <label for="alt">Circular orbit altitude · km</label
+            ><input id="alt" type="number" min="0" step="1" value="100" />
+            <div class="pair">
+              <div>
+                <label for="mass">Dry mass · kg</label
+                ><input id="mass" type="number" min="1" value="1500" />
+              </div>
+              <div>
+                <label for="isp">Engine Isp · s</label
+                ><input id="isp" type="number" min="1" value="320" />
+              </div>
+            </div>
+            <label for="dv">Mission Δv budget · m/s</label
+            ><input id="dv" type="number" min="0" value="2000" /><button
+              class="btn wide"
+              id="analyze"
+            >
+              Analyze landing site &nbsp; ↗
+            </button>
+            <div id="status" class="status">
+              Ready to query NASA JPL Horizons.
+            </div>
+          </div>
+        </aside>
+        <div>
+          <section class="panel planner-results">
+            <div class="eyebrow">MISSION-MATCHED SHORTLIST</div>
+            <h2>Where should your mission land?</h2>
+            <p id="recstatus" aria-live="polite">
+              Describe your mission, choose a destination, and find landing
+              options.
+            </p>
+            <div id="recommendations"></div>
+            <p class="tiny" style="margin-top: 14px">
+              Ranked among three candidate areas, not every location. Science
+              fit uses disclosed illustrative heuristics, not terrain analysis.
+              Horizons samples 25 times across your duration; percentages are
+              sampled geometry, not guaranteed power or communication
+              availability. Other bodies use exploratory coordinates when no
+              curated areas exist. No local shadows, eclipses, weather,
+              radiation, or landing safety assessment. Gas giants have no solid
+              landing surface and are excluded.
+            </p>
+          </section>
+          <section class="panel">
+            <div class="maphead">
+              <strong id="maptitle"
+                >The Moon
+                <span style="color: #89917f">/ Surface explorer</span></strong
+              ><span class="tag">EQUIRECTANGULAR</span>
+            </div>
+            <div class="mapbox">
+              <canvas
+                id="map"
+                aria-label="Interactive moon surface map. Click to select coordinates; coordinate inputs also available."
+              ></canvas>
+              <div class="maplabel" id="maplabel">LUNAR GLOBAL MOSAIC</div>
+              <div class="mapcontrols">
+                <button id="zin" aria-label="Zoom in">+</button
+                ><button id="zout" aria-label="Zoom out">−</button
+                ><button id="reset" aria-label="Reset map">⌖</button>
+              </div>
+              <div class="legend">
+                <span class="dot"></span>Selected site &nbsp; + &nbsp; Historic
+                landing sites
+              </div>
+            </div>
+            <div class="mapfoot">
+              <span id="credit">Imagery: Solar System Scope · CC BY 4.0</span
+              ><span id="zoom"
+                >1.0× &nbsp; / &nbsp; Click map to select a site</span
+              >
+            </div>
+          </section>
+          <section class="panel sitebar">
+            <div>
+              <div class="eyebrow">SELECTED LANDING SITE</div>
+              <b id="sitename">Apollo 11 · Sea of Tranquility</b>
+              <p class="tiny" id="coords">0.674° N &nbsp; 23.473° E</p>
+            </div>
+            <span class="badge">◎ &nbsp; SURFACE TARGET</span>
+          </section>
+          <div class="bottom">
+            <div class="panel stat">
+              <span class="tiny">SURFACE GRAVITY</span>
+              <div class="num" id="gravity">1.625 <span>m/s²</span></div>
+              <p class="tiny">Spherical-body estimate</p>
+            </div>
+            <div class="panel stat">
+              <span class="tiny">ESCAPE VELOCITY</span>
+              <div class="num" id="escape">2.376 <span>km/s</span></div>
+              <p class="tiny">At mean surface radius</p>
+            </div>
+            <div class="panel stat">
+              <span class="tiny">ORBITAL PERIOD</span>
+              <div class="num" id="period">117.8 <span>min</span></div>
+              <p class="tiny">At selected orbit altitude</p>
+            </div>
+          </div>
+        </div>
+        <aside class="panel results">
+          <div class="section">
+            <h2>Site conditions <span style="color: var(--lime)">↗</span></h2>
+            <div class="tiny">NASA / JPL HORIZONS</div>
+            <div class="metric">
+              <div class="top">Solar elevation <span>☀</span></div>
+              <div class="value" id="sun">— <small>deg</small></div>
+              <p class="tiny" id="sunhint">Analyze to retrieve illumination</p>
+            </div>
+            <div class="metric">
+              <div class="top">Earth elevation <span>◉</span></div>
+              <div class="value" id="earth">— <small>deg</small></div>
+              <p class="tiny" id="earthhint">Geometric line of sight</p>
+            </div>
+            <div class="metric">
+              <div class="top">Earth range <span>↔</span></div>
+              <div class="value" id="range">— <small>km</small></div>
+              <p class="tiny" id="delay">One-way light time: —</p>
+            </div>
+          </div>
+          <div class="section">
+            <h2>Mission estimates</h2>
+            <div class="metric">
+              <div class="top">Circular orbit velocity</div>
+              <div class="value" id="velocity">1.633 <small>km/s</small></div>
+            </div>
+            <div class="metric">
+              <div class="top">Ideal propellant required</div>
+              <div class="value" id="fuel">1,337 <small>kg</small></div>
+              <p class="tiny">Rocket equation · selected Δv</p>
+            </div>
+            <div class="note">
+              Concept planning only. Terrain slope, hazards, local shadows,
+              eclipses, atmosphere, and landing losses are not modeled.
+            </div>
+          </div>
+        </aside>
+      </div>
+      <footer>
+        <span
+          >SELENE / A NASA Space Apps Challenge project concept · Not affiliated
+          with NASA</span
+        ><span
+          >JPL Horizons ephemerides &nbsp; · &nbsp; Planetary exploration, made
+          accessible.</span
+        >
+      </footer>
+    </main>
+    <dialog id="info">
+      <h2 id="ititle"></h2>
+      <div id="itext"></div>
+      <button class="btn" onclick="document.querySelector('dialog').close()">
+        Back to navigator
+      </button>
+    </dialog>
+    <script src="app.js"></script>
+    <script src="mission-model.js"></script>
+    <script src="recommendations.js"></script>
+  </body>
+</html>
