@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: lunar-navigation-web
-    runtime: docker
-    plan: free
-    dockerfilePath: ./lunar-web/Dockerfile
-    dockerContext: ./lunar-web
-    healthCheckPath: /health

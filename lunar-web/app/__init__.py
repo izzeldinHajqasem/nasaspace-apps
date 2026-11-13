@@ -1,1 +1,0 @@
-# Lunar Navigation web application

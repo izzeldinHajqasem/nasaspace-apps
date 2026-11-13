@@ -1,80 +1,43 @@
-# Lunar Navigation Backend
+# SELENE — Lunar Landing Site Navigator
 
-A small FastAPI backend that retrieves natural-satellite ephemerides from JPL
-Horizons through Astroquery and returns frontend-friendly JSON.
+The source of the SELENE website built in this conversation, including the mission brief, interactive lunar atlas, JPL Horizons proxy, mission calculations, ranked landing-area shortlist, and JSON export.
 
-## 1. Setup
+SELENE is the sole application in this repository. Run the commands below from the repository root.
 
-Python 3.10+ recommended.
+## Build and run
 
-```bash
-python -m venv .venv
+Requires Python 3, curl, and Node.js 22+ (Node.js 24 recommended).
+
+```sh
+python3 build.py
+node serve.mjs
 ```
 
-Activate it:
+Open http://localhost:3000. The first build downloads a lunar texture from Solar System Scope into `.cache/`; subsequent builds reuse it. Network access to NASA JPL Horizons is required for live analysis. On hosts requiring a configured HTTP proxy, use `NODE_USE_ENV_PROXY=1` with Node.js 24.
 
-**Windows**
-```bash
-.venv\Scripts\activate
+## Verify
+
+```sh
+node tests/check.mjs
+node tests/recommend-check.mjs
 ```
 
-**macOS / Linux**
-```bash
-source .venv/bin/activate
-```
+The checks include live Horizons requests. Use `NODE_USE_ENV_PROXY=1 node ...` where required by your environment.
 
-Install packages and start the API:
+## Deploy
 
-```bash
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+The generated file `dist/server/index.mjs` is a Cloudflare Worker with a default `fetch` handler. Use the included `wrangler.toml` with your own Cloudflare account, for example `npx wrangler deploy` after building. No API keys or original Sites account identifiers are required. Local preview uses the same handler via `serve.mjs`.
 
-Open `http://127.0.0.1:8000/docs` for interactive API documentation.
+## Recommendation method and limits
 
-## 2. Endpoints
+Purpose and aim keyword rules weight resource, science, demonstration, and habitat fit. A three-area shortlist uses curated illustrative fit scores for the Moon, Mars, Europa, Enceladus, and Titan; other targets receive labeled exploratory reference coordinates. Solar/independent power and mission duration affect the weighting of sampled illumination. JPL Horizons supplies Sun and Earth geometry at 25 times across the mission duration. If any candidate lacks geometry, all candidates use mission-fit-only scores.
 
-- `GET /api/bodies` — available natural satellites and their parent bodies.
-- `GET /api/ephemeris/moon` — one state vector for the current time.
-- `GET /api/ephemeris/europa?epoch=2026-11-13T12:00:00` — state vector at a chosen epoch.
-- `GET /api/trajectory/moon?start=2026-11-13&stop=2026-11-14&step=1h` — time series for plotting.
-- `GET /api/orbit/titan` — osculating orbital elements.
+These are preliminary comparisons among three areas, not a global optimization or certified safe landing locations. Sampled percentages cannot guarantee continuous power or communications and may miss eclipses, nights, and gaps. No calibrated elevation, terrain hazards, atmosphere/entry dynamics, radiation, weather, or trajectory solver is included. Horizons surface support and ephemeris coverage vary by target. Gas giants are excluded.
 
-Supported keys: `moon`, `phobos`, `deimos`, `io`, `europa`, `ganymede`,
-`callisto`, `enceladus`, `titan`, `triton`.
+## Data and attribution
 
-## 3. Example frontend request
+- NASA/JPL Horizons: https://ssd.jpl.nasa.gov/horizons/ (UTC, east-positive longitude, geodetic surface observer at 0 km, airless apparent coordinates).
+- Lunar texture: Solar System Scope, https://www.solarsystemscope.com/textures/ , CC BY 4.0: https://creativecommons.org/licenses/by/4.0/ . Shown as an interactive equirectangular visual atlas with grid and markers; not a calibrated hazard map.
+- Approximate physical constants: NASA/JPL planetary satellite fact tables. Custom targets require a valid Horizons ID, mean radius, and GM.
 
-```javascript
-const response = await fetch("http://127.0.0.1:8000/api/ephemeris/moon");
-const state = await response.json();
-
-console.log(state.position);
-console.log(state.velocity);
-```
-
-For a Three.js trajectory, call `/api/trajectory/moon?...` and map each
-`position_km` point to a `THREE.Vector3`.
-
-## 4. Coordinate and engineering notes
-
-- State vectors are returned relative to the selected moon's parent-body center.
-- Position is converted from AU to km; velocity from AU/day to km/s.
-- The `refplane="earth"` setting requests the equatorial reference plane.
-- Distances and speeds are derived from the returned state vector.
-- The orbital-elements endpoint returns Horizons osculating elements relative
-  to the selected parent-body center.
-- Horizons output is ephemeris/reference data, not live spacecraft telemetry.
-  It does not determine a lander's or rover's position.
-- This is a research/demo backend, not flight-qualified navigation software.
-  Operational navigation needs spacecraft observations, an estimator,
-  uncertainty handling, validated frames/time systems, and mission-specific
-  dynamics.
-
-## 5. Deployment
-
-Before public deployment:
-- Replace the localhost CORS origins with your actual frontend domain.
-- Add request limits, caching, logging, and monitoring.
-- Avoid sending very large trajectory requests.
-- Pin tested dependency versions for reproducible deployments.
+Not affiliated with NASA. No software license is assigned by this export; the texture retains its stated license.
