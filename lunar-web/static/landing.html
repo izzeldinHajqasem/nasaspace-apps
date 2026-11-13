@@ -112,6 +112,33 @@ label{color:#afc3df!important;font-size:12px;font-weight:650;letter-spacing:.035
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 
+
+/* LROC QuickMap-inspired scientific mapping workspace */
+:root{--bg:#080e16;--panel:#162433;--panel-hover:#243a52;--line:#33495d;--text:#eaf1f7;--muted:#acbacb;--accent:#4b9fd3;--accent-strong:#6ebce8;--teal:#79cbdb}
+body{background:#0c121a!important;color:#e7eef6!important}
+header{padding:20px 3.1%!important;background:#192838!important;border-bottom:1px solid #42576a!important;min-height:100px}
+header:after{opacity:.17!important;width:160px!important;right:3%!important}
+header h1{font-size:clamp(25px,3vw,34px)!important;letter-spacing:-.035em!important;margin:4px 0!important}
+header p{font-size:13px!important}
+.kicker{font-size:10px;letter-spacing:.14em;color:#86bddd}
+.site-nav{padding:7px 3%!important;background:#1b2b3d!important;border-bottom:1px solid #40566b!important;gap:3px!important}
+.site-nav a{padding:9px 12px!important;border-radius:4px!important}
+.site-nav a[aria-current]{background:#2d5778!important;border-color:#5b89ac!important}
+main{padding:15px 3% 35px!important;max-width:none!important}
+.wrap{max-width:none!important}
+.card,.panel{background:#192a3d!important;border:1px solid #344b61!important;border-radius:6px!important;box-shadow:0 10px 36px #0004!important}
+.card h2,.panel h2{letter-spacing:-.01em!important}
+button,input,select{border-radius:4px!important;background:#233b54!important;border-color:#4d6781!important}
+button.primary,#load,#locate{background:#2874ab!important;border-color:#5497c0!important;box-shadow:none!important}
+.stat,.metric,.stats:not(#details){border-radius:4px!important;background:#263d53!important}
+.quick-links a{border-radius:4px!important;background:#203a51!important}
+#chart,.chart,.globe,.mapframe,#surface-map{border-radius:3px!important}
+.site-footer{max-width:none!important;border-top:1px solid #354b61!important}
+.map-workspace-title{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#1a2a3b;border:1px solid #3e5367;padding:10px 14px;color:#d7e7f5;font-size:12px}
+.map-workspace-title .map-breadcrumb{color:#85b9d9;letter-spacing:.06em;font-weight:700}
+.map-workspace-title .map-meta{color:#acc4d8;font-variant-numeric:tabular-nums}
+@media(max-width:780px){header{padding:20px 4%!important}.site-nav{padding:8px 4%!important}main{padding:12px 3% 30px!important}}
+
 </style></head><body>
 <header><div class="kicker">Mission analysis / NASA Space Apps prototype</div><h1>Landing Site Planner</h1><p>Compare candidate lunar south-pole locations using Sun illumination and direct-to-Earth geometry.</p>
 </header>
@@ -122,7 +149,7 @@ label{color:#afc3df!important;font-size:12px;font-weight:650;letter-spacing:.035
   <a href="/landing" data-page="landing" aria-current="page">🚀 Landing Site Planner</a>
   <a href="/docs" data-page="api">⚙️ API Docs</a>
 </nav>
-<main>
+<div class="map-workspace-title"><span class="map-breadcrumb">LUNAR / MISSION PLANNING</span><span class="map-meta">SOLAR ILLUMINATION · EARTH VISIBILITY</span></div><main>
 <section class="card"><h2>Mission window</h2><div class="grid"><div class="field"><label for="start">UTC start date and time</label><input id="start" type="datetime-local"></div><div class="field"><label for="duration">Analysis period</label><select id="duration"><option value="24">24 hours</option><option value="48" selected>48 hours</option><option value="72">72 hours</option><option value="168">7 days</option></select></div></div><p class="hint">Select locations and compare the same date range. Default coordinates are illustrative south-polar candidates, not recommended or certified landing sites.</p></section>
 <div class="grid">
 <section class="card"><h2>Candidate A</h2><div class="controls"><div class="field"><label for="presetA">Location</label><select id="presetA"><option value="-89.5,0">Near south pole (illustrative)</option><option value="-88,45">South polar candidate 1 (illustrative)</option><option value="-86,90">South polar candidate 2 (illustrative)</option><option value="custom">Custom coordinates</option></select></div><div class="field"><label for="latA">Latitude (° N)</label><input id="latA" type="number" step="0.00001" min="-90" max="90" value="-89.5"></div><div class="field"><label for="lonA">Longitude (° E)</label><input id="lonA" type="number" step="0.00001" min="-180" max="180" value="0"></div></div><div class="metrics"><div class="metric"><span class="muted">Sun above horizon</span><b id="sunA">—</b></div><div class="metric"><span class="muted">Earth above horizon</span><b id="earthA">—</b></div><div class="metric"><span class="muted">Both visible</span><b id="bothA">—</b></div></div><div id="chartA" class="chart"></div></section>
