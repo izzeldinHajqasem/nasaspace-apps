@@ -2,8 +2,10 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lunar Navigator</title>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
 :root{font-family:system-ui,Arial,sans-serif;color-scheme:dark}body{margin:0;background:#081221;color:#e8f2ff}header{padding:25px 5%;border-bottom:1px solid #28415c}h1{margin:0}header p{color:#9ab4d3}main{padding:24px 5%}.card{background:#101f35;border:1px solid #2b4261;border-radius:14px;padding:22px}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{display:block;margin:0 0 8px;color:#a8c2df}select,input,button{padding:11px;border-radius:7px;background:#1a314e;color:#fff;border:1px solid #426081}button{background:#3279db;cursor:pointer}button:disabled{opacity:.6}#chart{height:510px}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.stat{padding:15px;background:#182d49;border-radius:10px;min-width:155px}.stat b{display:block;font-size:21px;margin-top:6px}small{color:#9ab4d3}a{color:#90c9ff}
+#surface-map{height:420px;background:#07101a;border-radius:10px;margin-top:14px}.surface-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.surface-controls input{width:112px}.surface-panel{margin-top:24px}#surface-note{color:#a8c2df} .leaflet-container{background:#091422} .leaflet-control-attribution{font-size:10px}
 </style></head>
 <body><header><h1>🌙 Lunar Navigator</h1><p>Interactive moon orbit visualizer · NASA/JPL Horizons</p></header>
 <main><div class="card"><div class="controls">
@@ -16,14 +18,63 @@
 <div class="stat">Distance<b id="distance">—</b></div>
 <div class="stat">Orbital speed<b id="speed">—</b></div></div>
 <div id="chart"></div><small>The parent body's center is (0,0,0). Reference ephemerides, not live navigation or spacecraft tracking. Units: km and km/s.</small></div>
-<p><a href="/docs">API documentation</a></p></main>
+<section class="card surface-panel" aria-label="Lunar surface map">
+<h2>Surface map &amp; selected location</h2>
+<p id="surface-note">Select a surface point by clicking the map or entering selenographic coordinates. The marker is independent of the Moon’s orbital position.</p>
+<div class="surface-controls">
+<div><label for="latitude">Latitude (°)</label><input id="latitude" type="number" min="-90" max="90" step="0.0001" value="0"></div>
+<div><label for="longitude">Longitude (° East)</label><input id="longitude" type="number" min="-180" max="180" step="0.0001" value="0"></div>
+<button id="locate">Locate on surface</button>
+<button id="apollo" type="button">Apollo 11 site</button>
+</div>
+<p id="surface-coords" role="status"></p>
+<div id="surface-map"></div>
+<p><small>Imagery: NASA Moon Trek / Lunar Reconnaissance Orbiter WAC mosaic. Planetary surface coordinates, not a spacecraft fix. Moon surface imagery is currently available only for Earth's Moon in this panel.</small></p>
+<p><a href="https://trek.nasa.gov/moon/" target="_blank" rel="noopener noreferrer">Explore NASA Moon Trek in more detail</a></p>
+</section><p><a href="/docs">API documentation</a></p></main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const el=id=>document.getElementById(id);
+let lunarMap=null,surfaceMarker=null;
+const moonBounds=[[-256,0],[0,512]];
+function mapPosition(lat,lon){return [-256*(90-lat)/180,512*(lon+180)/360]}
+function toSelenographic(ll){return {lat:90+ll.lat*180/256,lon:ll.lng*360/512-180}}
+function setSurfaceLocation(lat,lon,recenter=true){
+ if(!Number.isFinite(lat)||!Number.isFinite(lon)||lat<-90||lat>90||lon<-180||lon>180){el('surface-coords').textContent='Enter latitude -90° to 90° and longitude -180° to 180°.';return}
+ el('latitude').value=lat.toFixed(4);el('longitude').value=lon.toFixed(4);
+ el('surface-coords').textContent='Surface coordinates: '+lat.toFixed(4)+'° latitude, '+lon.toFixed(4)+'° east longitude';
+ if(lunarMap){const ll=mapPosition(lat,lon);if(surfaceMarker)surfaceMarker.setLatLng(ll);else surfaceMarker=L.marker(ll).addTo(lunarMap);if(recenter)lunarMap.panTo(ll);}
+}
+function initializeSurfaceMap(){
+ lunarMap=L.map('surface-map',{crs:L.CRS.Simple,minZoom:0,maxZoom:6,maxBounds:moonBounds,maxBoundsViscosity:1,zoomControl:true});
+ const tiles=L.tileLayer('https://trek.nasa.gov/trektiles/Moon/EQ/LRO_WAC_Mosaic_Global_303ppd_v02/1.0.0/default/default028mm/{z}/{y}/{x}.jpg',{
+  tileSize:256,minZoom:0,maxNativeZoom:5,maxZoom:6,noWrap:true,bounds:moonBounds,
+  attribution:'NASA/JPL Moon Trek · LRO WAC'
+ }).addTo(lunarMap);
+ tiles.on('tileerror',()=>{el('surface-note').textContent='NASA Moon Trek imagery may be temporarily unavailable. You can still select coordinates or open the full NASA Moon Trek map below.'});
+ lunarMap.fitBounds(moonBounds);
+ lunarMap.on('click',e=>{const p=toSelenographic(e.latlng);setSurfaceLocation(Math.max(-90,Math.min(90,p.lat)),Math.max(-180,Math.min(180,p.lon)),false)});
+ setSurfaceLocation(0,0,false);
+}
+function updateSurfaceVisibility(){
+ const moonSelected=el('body').value==='moon';
+ el('surface-map').style.display=moonSelected?'block':'none';
+ el('latitude').disabled=!moonSelected;el('longitude').disabled=!moonSelected;
+ el('locate').disabled=!moonSelected;el('apollo').disabled=!moonSelected;
+ el('surface-note').textContent=moonSelected?
+ 'Select a location on Earth’s Moon by clicking the surface map or entering latitude/longitude.':
+ 'The surface map currently supports Earth’s Moon only. The selected satellite’s orbital trajectory remains available above.';
+ if(moonSelected&&lunarMap)setTimeout(()=>lunarMap.invalidateSize(),0);
+}
+el('locate').addEventListener('click',()=>setSurfaceLocation(Number(el('latitude').value),Number(el('longitude').value)));
+el('apollo').addEventListener('click',()=>setSurfaceLocation(0.6741,23.4729));
+el('body').addEventListener('change',updateSurfaceVisibility);
 const now=new Date();
 el('start').value=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
 async function init(){
  const r=await fetch('/api/bodies');if(!r.ok)throw Error('Cannot load moons');
  for(const b of await r.json()){const o=document.createElement('option');o.value=b.key;o.textContent=b.name+' ('+b.parent+')';el('body').append(o)}
+ initializeSurfaceMap();updateSurfaceVisibility();
  await load();
 }
 async function load(){
