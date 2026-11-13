@@ -21,10 +21,15 @@ BODIES = {
 }
 app = FastAPI(title="Lunar Navigation Explorer")
 INDEX = Path(__file__).parent.parent / "static" / "index.html"
+SURFACE = Path(__file__).parent.parent / "static" / "surface.html"
 
 @app.get("/")
 def home():
     return FileResponse(INDEX)
+
+@app.get("/surface")
+def surface():
+    return FileResponse(SURFACE)
 
 @app.get("/health")
 def health():
