@@ -39,7 +39,7 @@ const canvas=$('globe'),ctx=canvas.getContext('2d');
 function rad(d){return d*Math.PI/180}
 function surface(lat,lon){const a=rad(lat),b=rad(lon);return [Math.cos(a)*Math.sin(b),Math.sin(a),Math.cos(a)*Math.cos(b)]}
 function transform(v){let [x,y,z]=v;const cy=Math.cos(yaw),sy=Math.sin(yaw);let a=x*cy+z*sy,b=-x*sy+z*cy;const cp=Math.cos(pitch),sp=Math.sin(pitch);return [a,y*cp-b*sp,y*sp+b*cp]}
-function centerSite(i){selected=i;const s=sites[i];yaw=-rad(s.lon);pitch=-rad(s.lat);update();draw()}
+function centerSite(i){selected=i;const s=sites[i];yaw=-rad(s.lon);pitch=rad(s.lat);update();draw()}
 function update(){
  const s=sites[selected];$('site').value=String(selected);
  $('details').innerHTML='<strong>'+s.mission+' · '+s.region+'</strong><div>'+s.crew+' · '+s.date+'</div><div>Latitude: '+Math.abs(s.lat).toFixed(5)+'° '+(s.lat>=0?'N':'S')+' · Longitude: '+Math.abs(s.lon).toFixed(5)+'° '+(s.lon>=0?'E':'W')+'</div>';
