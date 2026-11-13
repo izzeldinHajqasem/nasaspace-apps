@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lunar Navigator</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color-scheme:dark}body{margin:0;background:#081221;color:#e8f2ff}header{padding:25px 5%;border-bottom:1px solid #28415c}h1{margin:0}header p{color:#9ab4d3}main{padding:24px 5%}.card{background:#101f35;border:1px solid #2b4261;border-radius:14px;padding:22px}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{display:block;margin:0 0 8px;color:#a8c2df}select,input,button{padding:11px;border-radius:7px;background:#1a314e;color:#fff;border:1px solid #426081}button{background:#3279db;cursor:pointer}button:disabled{opacity:.6}#chart{height:510px}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.stat{padding:15px;background:#182d49;border-radius:10px;min-width:155px}.stat b{display:block;font-size:21px;margin-top:6px}small{color:#9ab4d3}a{color:#90c9ff}
+</style></head>
+<body><header><h1>🌙 Lunar Navigator</h1><p>Interactive moon orbit visualizer · NASA/JPL Horizons</p></header>
+<main><div class="card"><div class="controls">
+<div><label for="body">Moon</label><select id="body"></select></div>
+<div><label for="start">Start time (UTC)</label><input type="datetime-local" id="start"></div>
+<div><label for="hours">Duration</label><select id="hours"><option value="6">6 hours</option><option value="24" selected>1 day</option><option value="72">3 days</option><option value="168">7 days</option></select></div>
+<button id="load">Visualize trajectory</button></div>
+<p id="status" role="status"></p><div class="stats">
+<div class="stat">Parent planet<b id="parent">—</b></div>
+<div class="stat">Distance<b id="distance">—</b></div>
+<div class="stat">Orbital speed<b id="speed">—</b></div></div>
+<div id="chart"></div><small>The parent body's center is (0,0,0). Reference ephemerides, not live navigation or spacecraft tracking. Units: km and km/s.</small></div>
+<p><a href="/docs">API documentation</a></p></main>
+<script>
+const el=id=>document.getElementById(id);
+const now=new Date();
+el('start').value=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,16);
+async function init(){
+ const r=await fetch('/api/bodies');if(!r.ok)throw Error('Cannot load moons');
+ for(const b of await r.json()){const o=document.createElement('option');o.value=b.key;o.textContent=b.name+' ('+b.parent+')';el('body').append(o)}
+ await load();
+}
+async function load(){
+ el('status').textContent='Querying JPL Horizons…';el('load').disabled=true;
+ try{
+  const a=new Date(el('start').value);if(Number.isNaN(a.getTime()))throw Error('Invalid time');
+  const b=new Date(a.getTime()+Number(el('hours').value)*3600000);
+  const params=new URLSearchParams({start:a.toISOString(),stop:b.toISOString(),step_minutes:'60'});
+  const r=await fetch('/api/trajectory/'+encodeURIComponent(el('body').value)+'?'+params);
+  const d=await r.json();if(!r.ok)throw Error(d.detail||'Request failed');
+  const p=d.points;if(!p.length)throw Error('No ephemeris points returned');
+  Plotly.newPlot('chart',[{type:'scatter3d',mode:'lines+markers',name:d.name,x:p.map(x=>x.position_km[0]),y:p.map(x=>x.position_km[1]),z:p.map(x=>x.position_km[2]),line:{color:'#5abbff',width:5},marker:{size:2}},{type:'scatter3d',mode:'markers',name:d.parent+' center',x:[0],y:[0],z:[0],marker:{size:7,color:'#ffce69'}}],{paper_bgcolor:'#101f35',font:{color:'#e8f2ff'},margin:{l:0,r:0,t:20,b:0},scene:{aspectmode:'data',xaxis:{title:'X (km)'},yaxis:{title:'Y (km)'},zaxis:{title:'Z (km)'}}},{responsive:true});
+  el('parent').textContent=d.parent;el('distance').textContent=Math.round(p[0].distance_km).toLocaleString()+' km';el('speed').textContent=p[0].speed_km_s.toFixed(3)+' km/s';el('status').textContent='Showing '+p.length+' samples';
+ }catch(e){el('status').textContent='Error: '+e.message}finally{el('load').disabled=false}
+}
+el('load').addEventListener('click',load);init().catch(e=>el('status').textContent=e.message);
+</script></body></html>
