@@ -34,7 +34,7 @@ illustrative and are NOT verified NASA landing candidates.
 
 ### Scope / limits
 - Terrain-aware horizon, LOLA/DEM elevation, crater shadowing and slopes
-  **are not yet implemented**; QuickMap is linked for qualitative inspection.
+  **are not yet implemented**; NASA Moon Trek is linked for qualitative inspection.
 - Earth line-of-sight is only geometric: it is not a communication link budget
   or a guarantee of communications availability.
 - Smooth-horizon solar geometry is not a prediction of solar power availability.
@@ -45,3 +45,7 @@ illustrative and are NOT verified NASA landing candidates.
 
 Run the FastAPI app (from `lunar-web`) and open `http://localhost:8000/landing`.
 Select the date and compare candidate A and B. Open `/docs` to test the new API.
+
+### Lunar surface map
+
+The `/surface` page embeds [NASA Moon Trek](https://trek.nasa.gov/moon/) in place of LROC QuickMap. Use the **3D Globe** or **South Pole Map** projection inside Moon Trek. An **Open NASA Moon Trek** link is provided because the external site may block iframe embedding. Apollo markers remain on the separately rendered demonstration globe.
