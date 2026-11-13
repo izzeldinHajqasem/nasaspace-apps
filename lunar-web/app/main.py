@@ -5,6 +5,7 @@ from astropy.time import Time
 from astroquery.jplhorizons import Horizons
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
+from .landing import router as landing_router
 
 AU_KM = 149597870.7
 BODIES = {
@@ -20,8 +21,10 @@ BODIES = {
  "triton": ("Triton","801","Neptune","500@899"),
 }
 app = FastAPI(title="Lunar Navigation Explorer")
+app.include_router(landing_router)
 INDEX = Path(__file__).parent.parent / "static" / "index.html"
 SURFACE = Path(__file__).parent.parent / "static" / "surface.html"
+LANDING = Path(__file__).parent.parent / "static" / "landing.html"
 
 @app.get("/")
 def home():
@@ -30,6 +33,10 @@ def home():
 @app.get("/surface")
 def surface():
     return FileResponse(SURFACE)
+
+@app.get("/landing")
+def landing():
+    return FileResponse(LANDING)
 
 @app.get("/health")
 def health():
