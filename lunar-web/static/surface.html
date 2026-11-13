@@ -4,7 +4,7 @@
 <style>
 :root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#08111e;color:#eaf2ff}*{box-sizing:border-box}body{margin:0}header{padding:20px 4%;border-bottom:1px solid #29425d;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}h1{font-size:23px;margin:0}p{color:#a7bad3;font-size:14px}a{color:#8cbdff}.wrap{padding:20px 4%;display:grid;grid-template-columns:minmax(300px,.9fr) minmax(380px,1.15fr);gap:18px;align-items:start}.panel{background:#112035;border:1px solid #2c435e;border-radius:13px;padding:15px;min-width:0}.panel h2{font-size:17px;margin:0 0 10px}.globe{width:100%;height:385px;display:block;background:radial-gradient(ellipse at center,#142942,#08111e 75%);border-radius:9px;cursor:grab;touch-action:none}.globe:active{cursor:grabbing}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}button,select{padding:10px 12px;background:#193453;border:1px solid #47678e;color:#eaf2ff;border-radius:8px;cursor:pointer}button.primary{background:#2869af}.stats{border-radius:9px;background:#182b45;padding:12px;font-size:14px;line-height:1.65;min-height:98px}.mapframe{width:100%;height:500px;border:0;border-radius:9px;background:#0b1727}.muted{color:#a7bad3;font-size:12px}.sites{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.sites button{text-align:left;padding:10px}.sites button.active{border-color:#83b9ff;background:#254a73}.hint{font-size:12px;color:#a7bad3;margin-top:8px}.headingline{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{font-size:11px;padding:5px 8px;border-radius:99px;background:#233952;color:#bdd8f4}@media(max-width:950px){.wrap{grid-template-columns:1fr}.mapframe{height:450px}}@media(max-width:540px){.sites{grid-template-columns:repeat(2,minmax(0,1fr))}.globe{height:325px}h1{font-size:20px}}
 </style></head><body>
-<header><div><h1>🌕 Lunar Surface Explorer</h1><p>Apollo astronaut landing sites · 3D globe and LROC QuickMap terrain</p></div><a href="/">← Orbital navigator</a></header>
+<header><div><h1>🌕 Lunar Surface Explorer</h1><p>Apollo astronaut landing sites · 3D globe and NASA Moon Trek terrain</p></div><a href="/">← Orbital navigator</a></header>
 <div style="padding:10px 4%;"><a href="/landing" style="color:#9ee1ba">🚀 Compare lunar south-pole landing sites and dates →</a></div><div class="wrap">
 <section class="panel"><div class="headingline"><h2>Interactive lunar globe</h2><span class="pill">Schematic rendering</span></div>
 <canvas class="globe" id="globe" aria-label="Rotatable 3D Moon globe with Apollo landing site markers"></canvas>
@@ -13,19 +13,18 @@
 <div class="stats" id="details"></div><div class="sites" id="sites"></div>
 <div class="muted">Site locations use NASA's Lunar Reconnaissance Orbiter-derived lunar-module coordinates (degrees north/east). The globe is illustrative, not a topographic model.</div>
 </section>
-<section class="panel"><div class="headingline"><h2>LROC QuickMap — real lunar imagery</h2><span class="pill">External map</span></div>
-<p>Explore the actual lunar surface in the embedded Lunar Reconnaissance Orbiter Camera QuickMap. Your original camera view is preserved.</p>
-<iframe class="mapframe" id="quickmap" title="LROC QuickMap lunar terrain globe" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<div class="toolbar"><button class="primary" id="openmap">Open QuickMap full-screen ↗</button><button id="reloadmap">Reload embedded map</button></div>
-<p class="muted">If the QuickMap area stays blank, its website may restrict iframe embedding or the browser may block it. Use Open QuickMap full-screen. Landing markers on the globe at left cannot be injected into QuickMap because it is hosted by another website.</p>
+<section class="panel"><div class="headingline"><h2>NASA Moon Trek — lunar terrain</h2><span class="pill">NASA surface map</span></div>
+<p>Explore NASA's Moon Trek lunar imagery, map layers and terrain tools. In Moon Trek, choose <strong>3D Globe</strong> for a spherical view or <strong>South Pole Map</strong> to examine polar landing regions.</p>
+<iframe class="mapframe" id="moontrek" title="NASA Moon Trek lunar surface explorer" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<div class="toolbar"><a class="primary" id="openmap" href="https://trek.nasa.gov/moon/" target="_blank" rel="noopener noreferrer" style="color:#fff;text-decoration:none;display:inline-block;padding:10px 12px;border-radius:8px;background:#2869af">Open NASA Moon Trek ↗</a><button id="reloadmap">Reload embedded map</button></div>
+<p class="muted">If Moon Trek does not load above, open it using the button. Some browsers or NASA security settings may block embedding. The Apollo landing markers on the left are part of this website and do not automatically appear inside NASA's separate Moon Trek application.</p>
 </section></div>
 <script>
 (function(){
-const url='https://quickmap.lroc.im-ldi.com/?camera=3352476.4672%2C2732575.4035%2C1311929.2757%2C-0.7418%2C-0.6046%2C-0.2903%2C-0.225%2C-0.1834%2C0.9569%2C60&earthShadowEnabled=true&proj=22&stack=3314&defs=N4IgzGCMAsIFygPYAcCGBjAlgFwJ70gF9Cg';
+const url='https://trek.nasa.gov/moon/';
 const $=id=>document.getElementById(id);
-$('quickmap').src=url;
-$('openmap').onclick=()=>window.open(url,'_blank','noopener,noreferrer');
-$('reloadmap').onclick=()=>{$('quickmap').src=url};
+$('moontrek').src=url;
+$('reloadmap').onclick=()=>{$('moontrek').src=url;};
 const sites=[
 {mission:'Apollo 11',region:'Mare Tranquillitatis',lat:.67416,lon:23.47314,date:'20 July 1969',crew:'Neil Armstrong and Buzz Aldrin'},
 {mission:'Apollo 12',region:'Oceanus Procellarum',lat:-3.0128,lon:-23.4219,date:'19 November 1969',crew:'Pete Conrad and Alan Bean'},
