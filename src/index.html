@@ -32,6 +32,160 @@
       </div>
       <section class="panel flight-panel">
         <div class="section">
+          <div class="eyebrow">MANEUVERS + RESERVE</div>
+          <h2>Final mission Δv budget</h2>
+          <p>
+            Editable lunar example from low Earth parking orbit to the surface.
+            This is a velocity-change budget, not a money budget or a trajectory
+            solver. Replace every value for your mission; the preset does not
+            adapt to other destinations.
+          </p>
+          <div class="budget-rows">
+            <label for="budgetlaunch"
+              >Earth surface → parking orbit<span class="tiny"
+                >Launch rocket</span
+              ><input
+                id="budgetlaunch"
+                type="number"
+                min="0"
+                step="any"
+                value="0"
+                required
+                aria-label="Earth surface → parking orbit delta v in metres per second" /></label
+            ><label for="budgetdeparture"
+              >Departure / transfer injection<span class="tiny"
+                >Transfer vehicle</span
+              ><input
+                id="budgetdeparture"
+                type="number"
+                min="0"
+                step="any"
+                value="3150"
+                required
+                aria-label="Departure / transfer injection delta v in metres per second" /></label
+            ><label for="budgetcorrections"
+              >Course corrections<span class="tiny">Transfer vehicle</span
+              ><input
+                id="budgetcorrections"
+                type="number"
+                min="0"
+                step="any"
+                value="50"
+                required
+                aria-label="Course corrections delta v in metres per second" /></label
+            ><label for="budgetcapture"
+              >Destination orbit insertion<span class="tiny"
+                >Transfer vehicle</span
+              ><input
+                id="budgetcapture"
+                type="number"
+                min="0"
+                step="any"
+                value="900"
+                required
+                aria-label="Destination orbit insertion delta v in metres per second" /></label
+            ><label for="budgetlanding"
+              >Descent and landing<span class="tiny">Lander</span
+              ><input
+                id="budgetlanding"
+                type="number"
+                min="0"
+                step="any"
+                value="1900"
+                required
+                aria-label="Descent and landing delta v in metres per second" /></label
+            ><label for="budgetascent"
+              >Surface ascent (return)<span class="tiny">Return vehicle</span
+              ><input
+                id="budgetascent"
+                type="number"
+                min="0"
+                step="any"
+                value="0"
+                required
+                aria-label="Surface ascent (return) delta v in metres per second" /></label
+            ><label for="budgetreturn"
+              >Return departure<span class="tiny">Return vehicle</span
+              ><input
+                id="budgetreturn"
+                type="number"
+                min="0"
+                step="any"
+                value="0"
+                required
+                aria-label="Return departure delta v in metres per second" /></label
+            ><label for="budgetother"
+              >Other maneuvers<span class="tiny">Transfer vehicle</span
+              ><input
+                id="budgetother"
+                type="number"
+                min="0"
+                step="any"
+                value="0"
+                required
+                aria-label="Other maneuvers delta v in metres per second"
+            /></label>
+          </div>
+          <div class="flight-grid">
+            <label
+              >Reserve · %<input
+                id="budgetreserve"
+                type="number"
+                min="0"
+                max="100"
+                step="any"
+                value="15"
+                required
+            /></label>
+            <div>
+              <span class="tiny">MANEUVER SUBTOTAL</span>
+              <h3 id="budgetsubtotal">—</h3>
+            </div>
+            <div>
+              <span class="tiny">RESERVE</span>
+              <h3 id="budgetmargin">—</h3>
+            </div>
+            <div>
+              <span class="tiny">FINAL MISSION Δv</span>
+              <h3 id="budgettotal">—</h3>
+            </div>
+          </div>
+          <p id="budgetvehicles" class="tiny"></p>
+          <div class="pair">
+            <label
+              >Vehicle allocation to copy<select id="budgetvehicle">
+                <option>Transfer vehicle</option>
+                <option>Lander</option>
+                <option>Launch rocket</option>
+                <option>Return vehicle</option>
+              </select></label
+            >
+            <div>
+              <button id="applybudget" class="btn wide">
+                Use this vehicle’s Δv ↗
+              </button>
+            </div>
+          </div>
+          <button
+            id="budgetpreset"
+            class="btn outline"
+            style="margin-top: 12px"
+          >
+            Reset lunar one-way example
+          </button>
+          <p id="budgetstatus" class="status" aria-live="polite"></p>
+          <div class="note" style="margin-top: 12px">
+            All values are in m/s. Earth launch and return default to 0
+            (excluded). Enter them if required. Reserve applies to each vehicle
+            equally. The total across stages must not be entered as one
+            vehicle’s propellant requirement. Transfer/lander/return assignments
+            are a simplified allocation; independently size each real stage and
+            its changing mass.
+          </div>
+        </div>
+      </section>
+      <section class="panel flight-panel">
+        <div class="section">
           <div class="eyebrow">LAUNCH → TRANSFER → LANDING</div>
           <h2>Launch & arrival planner</h2>
           <p>
@@ -429,6 +583,87 @@ Find water ice and collect geological samples</textarea
           </div>
         </aside>
       </div>
+      <section class="panel flight-panel">
+        <div class="section">
+          <div class="eyebrow">SUNLIGHT & EARTH ABOVE THE HORIZON</div>
+          <h2>Sunset, Earthset & visibility window</h2>
+          <p>
+            Uses the selected destination, landing coordinate, and mission epoch
+            above. The visibility window is independent of the mission duration.
+          </p>
+          <div class="pair">
+            <label
+              >Visibility window · Earth days<input
+                id="horizondays"
+                type="number"
+                min="1"
+                max="60"
+                step="1"
+                value="14"
+                required
+            /></label>
+            <div>
+              <button id="calculatevisibility" class="btn wide">
+                Calculate visibility ↗
+              </button>
+            </div>
+          </div>
+          <p id="horizonrange" class="tiny"></p>
+          <div class="flight-grid">
+            <div>
+              <span class="tiny">NEXT SUNSET · ESTIMATED</span>
+              <h3 id="sunsettime">—</h3>
+              <span class="tiny">NEXT SUNRISE</span>
+              <p id="sunrisetime">—</p>
+            </div>
+            <div>
+              <span class="tiny">NEXT EARTHSET · ESTIMATED</span>
+              <h3 id="earthsettime">—</h3>
+              <span class="tiny">NEXT EARTHRISE</span>
+              <p id="earthrisetime">—</p>
+            </div>
+            <div>
+              <span class="tiny">TOTAL SUN ABOVE HORIZON</span>
+              <h3 id="sunlighthours">—</h3>
+              <span class="tiny">LONGEST ESTIMATED SUNLIT INTERVAL</span>
+              <p id="longestsunlight">—</p>
+            </div>
+            <div>
+              <span class="tiny">EARTH ABOVE HORIZON</span>
+              <h3 id="earthvisibility">—</h3>
+              <p class="tiny">Time-weighted portion of this window</p>
+            </div>
+          </div>
+          <label>Sun above geometric horizon</label>
+          <div
+            id="suntrack"
+            class="visibility-track"
+            aria-label="Sun above horizon timeline"
+          ></div>
+          <label>Earth above geometric horizon</label>
+          <div
+            id="earthtrack"
+            class="visibility-track earth-track"
+            aria-label="Earth above horizon timeline"
+          ></div>
+          <p class="tiny">
+            Colored bands: estimated time above 0°. Dark bands: below or on the
+            horizon. Timeline runs from start to end of the selected window.
+          </p>
+          <p id="horizonstatus" class="status" aria-live="polite">
+            Calculate to retrieve live JPL Horizons samples.
+          </p>
+          <div class="note" style="margin-top: 12px">
+            Geometric Sun/Earth center elevation, with linear interpolation at
+            15-minute sampling (up to 7 days) or hourly sampling (8–60 days).
+            Events between samples may be missed. Sunlight excludes eclipses and
+            terrain shadows; Earth visibility excludes occultations, terrain,
+            antennas, and communications link requirements. Duration and
+            crossing times are estimates. “No crossing detected” applies only to
+            this window.
+          </div>
+        </div>
+      </section>
       <footer>
         <span
           >SELENE / A NASA Space Apps Challenge project concept · Not affiliated
@@ -451,5 +686,7 @@ Find water ice and collect geological samples</textarea
     <script src="recommendations.js"></script>
     <script src="flight-model.js"></script>
     <script src="flight.js"></script>
+    <script src="planning-model.js"></script>
+    <script src="planning.js"></script>
   </body>
 </html>

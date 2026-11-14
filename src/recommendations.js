@@ -177,6 +177,7 @@ $("export").onclick = () => {
   let report = {
     ...recommendationReport,
     flight_plan: getFlightExport(),
+    planning: getPlanningExport(),
     limitations:
       "Ranked shortlist, not a global optimum. Heuristic science fit; 25 time samples can miss nights, eclipses and communication gaps. No terrain, hazards, weather, radiation, atmospheric entry, or trajectory validation.",
   };

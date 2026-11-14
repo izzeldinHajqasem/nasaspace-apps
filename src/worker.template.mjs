@@ -1,7 +1,15 @@
 const HTML = __HTML__;
 const IMAGE = __IMG__;
 // Request observer ephemerides at a geodetic surface coordinate (height: 0 km).
-export async function ephemeris(body, lat, lon, date, target, days = 0) {
+export async function ephemeris(
+  body,
+  lat,
+  lon,
+  date,
+  target,
+  days = 0,
+  intervalMinutes = 0,
+) {
   const start = new Date(date + "Z");
   if (!Number.isFinite(+start)) throw Error("Invalid UTC epoch");
   const stamp = (d) => d.toISOString().slice(0, 16).replace("T", " ");
@@ -15,7 +23,11 @@ export async function ephemeris(body, lat, lon, date, target, days = 0) {
     STOP_TIME:
       "'" + stamp(new Date(+start + (days ? days * 86400000 : 3600000))) + "'",
     // A numeric step requests 24 intervals: 25 samples including both endpoints.
-    STEP_SIZE: days ? "'24'" : "'1 h'",
+    STEP_SIZE: intervalMinutes
+      ? "'" + intervalMinutes + " m'"
+      : days
+        ? "'24'"
+        : "'1 h'",
     QUANTITIES: "'4,20'",
     CSV_FORMAT: "'YES'",
     APPARENT: "'AIRLESS'",
@@ -100,12 +112,29 @@ export default {
             { error: "Duration must be 1–3650 whole Earth days" },
             { status: 400 },
           );
+        const detailed = u.searchParams.get("detail") === "1";
+        if (detailed && (!days || days > 60))
+          return Response.json(
+            { error: "Detailed visibility requires 1–60 whole days." },
+            { status: 400 },
+          );
+        const intervalMinutes = detailed ? (days <= 7 ? 15 : 60) : 0;
         const [sun, earth] = await Promise.all([
-          ephemeris(b, lat, lon, date, 10, days),
-          ephemeris(b, lat, lon, date, 399, days),
+          ephemeris(b, lat, lon, date, 10, days, intervalMinutes),
+          ephemeris(b, lat, lon, date, 399, days, intervalMinutes),
         ]);
+        if (detailed) {
+          delete sun.raw;
+          delete earth.raw;
+        }
         return Response.json(
-          { source: "NASA/JPL Horizons", epoch: date, sun, earth },
+          {
+            interval_minutes: intervalMinutes,
+            source: "NASA/JPL Horizons",
+            epoch: date,
+            sun,
+            earth,
+          },
           { headers: { "Cache-Control": "public, max-age=300" } },
         );
       } catch (e) {

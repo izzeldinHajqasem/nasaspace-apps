@@ -380,6 +380,7 @@ $("export").onclick = () => {
     let report = {
       application: "SELENE",
       flight_plan: getFlightExport(),
+      planning: getPlanningExport(),
       target: b[0],
       horizons_id: b[2],
       epoch_utc: $("date").value,
