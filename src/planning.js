@@ -129,6 +129,7 @@ $("calculatevisibility").onclick = async () => {
     return;
   }
   invalidateHorizonReport();
+  invalidateLiveResults();
   const request = ++horizonRequest;
   const context = {
     target_id: target[2],
@@ -155,11 +156,18 @@ $("calculatevisibility").onclick = async () => {
     const data = await response.json();
     if (!response.ok) throw Error(data.error || "Horizons unavailable");
     if (request !== horizonRequest) return;
+    applySiteEphemeris(data);
     const sun = summarizeHorizonWindow(data.sun.samples),
       earth = summarizeHorizonWindow(data.earth.samples);
     horizonReport = {
       ...context,
       source: "NASA/JPL Horizons",
+      retrieval: {
+        sun_utc: data.sun.retrieved_at_utc,
+        earth_utc: data.earth.retrieved_at_utc,
+        sun_cached: Boolean(data.sun.cache_hit),
+        earth_cached: Boolean(data.earth.cache_hit),
+      },
       sun,
       earth,
       limitations:
@@ -197,14 +205,23 @@ $("calculatevisibility").onclick = async () => {
       sun.sample_count +
       " samples per body · spacing up to " +
       sun.max_sample_step_minutes +
-      " min. Times are estimated to sample-scale precision. No crossing detected does not mean a body never sets.";
+      " min" +
+      (data.sun.cache_hit || data.earth.cache_hit
+        ? " · matching recent JPL response reused"
+        : "") +
+      ". Times are estimated to sample-scale precision. No crossing detected does not mean a body never sets.";
     renderVisibilityTrack("suntrack", sun);
     renderVisibilityTrack("earthtrack", earth);
   } catch (error) {
-    if (request === horizonRequest)
-      $("horizonstatus").textContent =
-        "Visibility unavailable: " + error.message;
+    if (request === horizonRequest) {
+      const message = "Visibility unavailable: " + error.message;
+      $("horizonstatus").textContent = message;
+      $("status").textContent = message;
+    }
   } finally {
+    $("calculatevisibility").textContent = horizonReport
+      ? "Calculate visibility ↗"
+      : "Retry visibility ↗";
     $("calculatevisibility").disabled = false;
   }
 };

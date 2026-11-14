@@ -2,6 +2,7 @@ const HTML = __HTML__;
 const IMAGE = __IMG__;
 const REFERENCE_ASSETS = __ASSETS__;
 __TERRAIN_SERVICE__;
+__HORIZONS_CLIENT__;
 // Request observer ephemerides at a geodetic surface coordinate (height: 0 km).
 export async function ephemeris(
   body,
@@ -34,13 +35,9 @@ export async function ephemeris(
     CSV_FORMAT: "'YES'",
     APPARENT: "'AIRLESS'",
   });
-  const response = await fetch(
+  const data = await horizonsClient.request(
     "https://ssd.jpl.nasa.gov/api/horizons.api?" + params,
-    { signal: AbortSignal.timeout(25000) },
   );
-  if (!response.ok) throw Error("JPL service returned " + response.status);
-  const data = await response.json();
-  if (data.error) throw Error(data.error.slice(0, 350));
   const raw = data.result || "";
   const match = raw.match(/\$\$SOE\s*\n([^\n]+)/);
   if (!match)
@@ -80,7 +77,13 @@ export async function ephemeris(
     )
   )
     throw Error("Invalid time samples");
-  return { ...values, samples, raw };
+  return {
+    ...values,
+    samples,
+    raw,
+    cache_hit: data.cache_hit,
+    retrieved_at_utc: data.retrieved_at_utc,
+  };
 }
 export default {
   async fetch(request) {
@@ -151,10 +154,24 @@ export default {
             { status: 400 },
           );
         const intervalMinutes = detailed ? (days <= 7 ? 15 : 60) : 0;
-        const [sun, earth] = await Promise.all([
-          ephemeris(b, lat, lon, date, 10, days, intervalMinutes),
-          ephemeris(b, lat, lon, date, 399, days, intervalMinutes),
-        ]);
+        const sun = await ephemeris(
+          b,
+          lat,
+          lon,
+          date,
+          10,
+          days,
+          intervalMinutes,
+        );
+        const earth = await ephemeris(
+          b,
+          lat,
+          lon,
+          date,
+          399,
+          days,
+          intervalMinutes,
+        );
         if (detailed) {
           delete sun.raw;
           delete earth.raw;
@@ -170,7 +187,23 @@ export default {
           { headers: { "Cache-Control": "public, max-age=300" } },
         );
       } catch (e) {
-        return Response.json({ error: e.message }, { status: 502 });
+        const temporary = Boolean(e.temporary);
+        return Response.json(
+          {
+            error: e.message,
+            temporary,
+            retry_after_seconds: e.retryAfterSeconds || null,
+          },
+          {
+            status: temporary ? 503 : 502,
+            headers: temporary
+              ? {
+                  "Retry-After": String(e.retryAfterSeconds || 30),
+                  "Cache-Control": "no-store",
+                }
+              : { "Cache-Control": "no-store" },
+          },
+        );
       }
     }
     if (REFERENCE_ASSETS[u.pathname]) {

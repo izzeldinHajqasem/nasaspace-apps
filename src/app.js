@@ -312,6 +312,33 @@ for (let id of [
     if (id === "lat" || id === "lon") selectedName = "Custom landing site";
     updateSelectedSite();
   });
+// Reuse the first sample of a visibility request for the instantaneous readout.
+function applySiteEphemeris(data) {
+  last = data;
+  let s = data.sun,
+    e = data.earth;
+  $("sun").innerHTML = s.elevation.toFixed(2) + " <small>deg</small>";
+  $("sunhint").textContent =
+    s.elevation > 0
+      ? "Sun above geometric horizon"
+      : "Sun below geometric horizon";
+  $("earth").innerHTML = e.elevation.toFixed(2) + " <small>deg</small>";
+  $("earthhint").textContent =
+    e.elevation > 0
+      ? "Earth above geometric horizon"
+      : "Earth below geometric horizon";
+  $("range").innerHTML =
+    Math.round(e.rangeAU * 149597870.7).toLocaleString() + " <small>km</small>";
+  $("delay").textContent =
+    "One-way light time: " + (e.rangeAU * 499.00478).toFixed(2) + " s";
+  $("status").innerHTML =
+    '<span class="dot"></span>Horizons data retrieved · ' +
+    data.epoch +
+    " UTC" +
+    (data.sun.cache_hit || data.earth.cache_hit
+      ? " · Matching recent JPL data reused"
+      : "");
+}
 async function analyzeSelectedSite() {
   let b;
   try {
@@ -320,8 +347,8 @@ async function analyzeSelectedSite() {
     $("status").textContent = e.message;
     return;
   }
+  invalidateLiveResults();
   let n = ++seq;
-  last = null;
   calculateMissionEstimates();
   $("analyze").disabled = true;
   $("analyze").textContent = "Querying Horizons…";
@@ -339,34 +366,10 @@ async function analyzeSelectedSite() {
     const data = await res.json();
     if (!res.ok) throw Error(data.error || "Horizons request failed");
     if (n !== seq) return;
-    last = data;
-    let s = data.sun,
-      e = data.earth;
-    $("sun").innerHTML = s.elevation.toFixed(2) + " <small>deg</small>";
-    $("sunhint").textContent =
-      s.elevation > 0
-        ? "Sun above geometric horizon"
-        : "Sun below geometric horizon";
-    $("earth").innerHTML = e.elevation.toFixed(2) + " <small>deg</small>";
-    $("earthhint").textContent =
-      e.elevation > 0
-        ? "Earth above geometric horizon"
-        : "Earth below geometric horizon";
-    $("range").innerHTML =
-      Math.round(e.rangeAU * 149597870.7).toLocaleString() +
-      " <small>km</small>";
-    $("delay").textContent =
-      "One-way light time: " + (e.rangeAU * 499.00478).toFixed(2) + " s";
-    $("status").innerHTML =
-      '<span class="dot"></span>Horizons data retrieved · ' +
-      data.epoch +
-      " UTC";
+    applySiteEphemeris(data);
   } catch (err) {
     if (n === seq) {
-      $("status").textContent =
-        "Live data unavailable: " +
-        err.message +
-        " Try another epoch or supported target.";
+      $("status").textContent = "Live data unavailable: " + err.message;
     }
   } finally {
     $("analyze").disabled = false;

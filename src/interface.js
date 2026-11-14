@@ -125,14 +125,13 @@ $("finddata").onclick = async () => {
   $("findstatus").textContent =
     "Retrieving Horizons conditions and horizon visibility…";
   try {
-    await Promise.all([
-      analyzeSelectedSite(),
-      $("calculatevisibility").onclick(),
-    ]);
+    // Visibility supplies both the time window and its initial site conditions.
+    await $("calculatevisibility").onclick();
     $("findstatus").textContent = horizonReport
       ? "Data updated. Full report in Sun & Earth."
       : $("horizonstatus").textContent;
   } finally {
+    $("finddata").textContent = horizonReport ? "Find Data" : "Retry Find Data";
     $("finddata").disabled = false;
   }
 };

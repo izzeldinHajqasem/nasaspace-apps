@@ -105,3 +105,13 @@ Elevation source: [LRO LOLA LDEM_128 V3.0 label](https://imbrium.mit.edu/DATA/LO
 Time is **3D segment distance / flat-ground speed × (1 + 5 × absolute rise/run)**. This is an explicitly illustrative slope slowdown, not a validated rover performance model. Soil strength, traction, suspension, rocks/boulders, small craters, terrain below grid resolution, lighting and vehicle dynamics remain unresolved. A DEM route is not certified safe or globally optimal. A cyan terrain path is displayed alongside the dashed spherical baseline; a real elevation profile and all model assumptions are included in JSON export under the route's `terrain` field.
 
 Checks: `NODE_USE_ENV_PROXY=1 node tests/terrain-check.mjs` (omit proxy setting where unnecessary). These cover synthetic flat/ramp/ridge/no-data/obstacle cases, invalid requests, range safety, raster decoding, and a live LOLA patch near Apollo 11. The application needs outbound access to `imbrium.mit.edu` for terrain requests.
+
+## Horizons availability and fair-use handling
+
+`src/horizons-client.mjs` follows the [JPL SSD API fair-use policy](https://ssd-api.jpl.nasa.gov/doc/): one upstream request at a time within each Worker isolate, reuse of unchanged queries, and backoff on errors. The helper serializes Sun/Earth and concurrent client requests, deduplicates identical in-flight queries, and holds up to 32 matching raw responses for 15 minutes. Cache flags and retrieval timestamps accompany results; cached results must match the exact query and are never served after expiry. This is a per-isolate optimization, not a distributed global lock.
+
+Temporary network failures, malformed gateway responses, 429 and 500/502/503/504 receive at most three attempts with 2- and 5-second backoff (8-second fetch timeouts). After exhaustion, a 30-second cooldown prevents repeated upstream load. Long Retry-After headers create a corresponding cooldown (capped at one hour). Nonretryable HTTP errors and target/epoch errors are not repeatedly retried. Unavailable requests return HTTP 503 with Retry-After and an honest error payload; no synthetic visibility is substituted.
+
+Find Data now makes one visibility request, using its first samples to update instantaneous Sun/Earth conditions. This avoids duplicate simultaneous queries. Starting a new analysis clears prior condition and visibility values. Failures restore Retry visibility / Retry Find Data controls, and successes include cache/retrieval provenance. Full source timestamps are included in exported visibility metadata.
+
+Check failure/recovery paths with `node tests/horizons-resilience-check.mjs`. Live API checks remain separate and can legitimately fail during a JPL outage.

@@ -58,6 +58,9 @@ def main():
     terrain_service = (PROJECT_ROOT / "src/terrain-service.mjs").read_text(encoding="utf-8")
     terrain_service = terrain_service.replace("export const ", "const ").replace("export function ", "function ").replace("export async function ", "async function ")
     worker = worker.replace("__TERRAIN_SERVICE__", terrain_service)
+    horizons_client = (PROJECT_ROOT / "src/horizons-client.mjs").read_text(encoding="utf-8")
+    horizons_client = horizons_client.replace("export const ", "const ").replace("export function ", "function ")
+    worker = worker.replace("__HORIZONS_CLIENT__", horizons_client)
     output_path = PROJECT_ROOT / "dist/server/index.mjs"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(worker, encoding="utf-8")
