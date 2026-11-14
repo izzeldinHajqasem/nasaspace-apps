@@ -79,7 +79,15 @@
       <div class="nav-bottom">
         <button id="guide">Mission guide ↗</button
         ><button id="sources">Data & methodology ↗</button
-        ><span class="plane-symbol" aria-hidden="true">✈</span>
+        ><button
+          id="routeplane"
+          class="plane-symbol"
+          aria-label="Measure distance and travel time between two lunar points"
+          aria-pressed="false"
+          title="Measure a route on the Moon"
+        >
+          ✈</button
+        ><span class="route-short-label">Measure a lunar route</span>
         <p>NASA SPACE APPS<br />Independent project concept</p>
       </div>
     </aside>
@@ -377,6 +385,92 @@ Find water ice and collect geological samples</textarea
           >
             ‹
           </button>
+          <section
+            id="lunarroutepanel"
+            class="lunar-route-panel"
+            hidden
+            aria-label="Lunar distance and travel time calculator"
+          >
+            <div class="drawer-head">
+              <h2>✈ Lunar route</h2>
+              <button id="closeroute" aria-label="Close lunar route calculator">
+                ✕
+              </button>
+            </div>
+            <div class="route-panel-body">
+              <p>Pick two points on the coordinate atlas.</p>
+              <div class="route-picks">
+                <button id="pickrouteA" aria-pressed="true">
+                  Pick A · Start</button
+                ><button id="pickrouteB" aria-pressed="false">
+                  Pick B · End
+                </button>
+              </div>
+              <div class="pair">
+                <label
+                  >A latitude · °N<input
+                    id="routeAlat"
+                    type="number"
+                    min="-90"
+                    max="90"
+                    step="any"
+                    placeholder="Select start" /></label
+                ><label
+                  >A longitude · °E<input
+                    id="routeAlon"
+                    type="number"
+                    min="-180"
+                    max="180"
+                    step="any"
+                    placeholder="Select start" /></label
+                ><label
+                  >B latitude · °N<input
+                    id="routeBlat"
+                    type="number"
+                    min="-90"
+                    max="90"
+                    step="any"
+                    placeholder="Select end" /></label
+                ><label
+                  >B longitude · °E<input
+                    id="routeBlon"
+                    type="number"
+                    min="-180"
+                    max="180"
+                    step="any"
+                    placeholder="Select end"
+                /></label>
+              </div>
+              <button id="routefromsite" class="btn outline">
+                Use selected landing site as A</button
+              ><label
+                >Average surface travel speed · km/h<input
+                  id="routespeed"
+                  type="number"
+                  min="0.001"
+                  step="any"
+                  value="5"
+                  required
+              /></label>
+              <div class="route-result">
+                <span>Surface distance</span
+                ><strong id="routedistance">—</strong
+                ><span>Estimated travel time</span
+                ><strong id="routetime">—</strong>
+              </div>
+              <p id="routestatus" aria-live="polite">
+                Click the atlas to place point A.
+              </p>
+              <button id="clearroute" class="btn outline">Clear route</button>
+              <p class="tiny">
+                Shortest great-circle distance on a spherical Moon (radius
+                1,737.4 km). Time = distance ÷ entered average speed. Terrain,
+                obstacles, slopes, rest stops and route feasibility are not
+                modeled. This is surface travel, not spacecraft flight time.
+                Antipodal points have multiple equally short routes.
+              </p>
+            </div>
+          </section>
           <div class="scene-tools">
             <button data-tool="shortlist">Landing options</button
             ><button data-tool="launch">Launch & arrival</button
@@ -894,5 +988,7 @@ Find water ice and collect geological samples</textarea
     <script src="planning-model.js"></script>
     <script src="planning.js"></script>
     <script src="interface.js"></script>
+    <script src="route-model.js"></script>
+    <script src="route.js"></script>
   </body>
 </html>

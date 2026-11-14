@@ -215,6 +215,11 @@ function getPlanningExport() {
   } catch (error) {
     budget = { valid: false, error: error.message };
   }
-  return { delta_v_budget: budget, horizon_visibility: horizonReport };
+  return {
+    delta_v_budget: budget,
+    lunar_surface_route:
+      typeof getLunarRouteExport === "function" ? getLunarRouteExport() : null,
+    horizon_visibility: horizonReport,
+  };
 }
 renderBudget();

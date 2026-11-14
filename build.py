@@ -39,7 +39,7 @@ def bundle_page():
         f"<style>\n{stylesheet}\n</style>",
     )
 
-    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js", "interface.js"]:
+    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js", "interface.js", "route-model.js", "route.js"]:
         script = (source_directory / filename).read_text(encoding="utf-8")
         html = html.replace(
             f'<script src="{filename}"></script>',
