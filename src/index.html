@@ -444,7 +444,7 @@ Find water ice and collect geological samples</textarea
               <button id="routefromsite" class="btn outline">
                 Use selected landing site as A</button
               ><label
-                >Average surface travel speed · km/h<input
+                >Flat-ground travel speed · km/h<input
                   id="routespeed"
                   type="number"
                   min="0.001"
@@ -458,6 +458,67 @@ Find water ice and collect geological samples</textarea
                 ><span>Estimated travel time</span
                 ><strong id="routetime">—</strong>
               </div>
+              <details class="terrain-controls" open>
+                <summary>Terrain &amp; obstacles</summary>
+                <p class="tiny">
+                  Local routes up to 30 km, within ±85° latitude. Uses real LRO
+                  LOLA elevations (237 m native spacing at the equator).
+                </p>
+                <label
+                  >Maximum traversable slope · degrees<input
+                    id="maxrouteslope"
+                    type="number"
+                    min="0.1"
+                    max="45"
+                    step="any"
+                    value="15"
+                    required /></label
+                ><button id="analyzeterrain" class="btn">
+                  Analyze terrain &amp; find route</button
+                ><label
+                  >Known obstacle / exclusion radius · km<input
+                    id="routezoneradius"
+                    type="number"
+                    min="0.01"
+                    max="10"
+                    step="any"
+                    value="0.5"
+                    required /></label
+                ><button
+                  id="addroutezone"
+                  class="btn outline"
+                  aria-pressed="false"
+                >
+                  Mark blocked zone on atlas
+                </button>
+                <button id="focusterrain" class="btn outline">
+                  Zoom to A–B
+                </button>
+                <div id="routezones"></div>
+                <div class="route-result">
+                  <span>Terrain-following distance</span
+                  ><strong id="terraindistance">—</strong
+                  ><span>Slope-adjusted travel time</span
+                  ><strong id="terraintime">—</strong
+                  ><span>Elevation gain / loss</span
+                  ><strong id="terrainascent">—</strong
+                  ><span>Maximum path grade</span
+                  ><strong id="terrainslope">—</strong>
+                </div>
+                <div id="terrainprofile"></div>
+                <p id="terrainstatus" class="tiny" aria-live="polite">
+                  Select endpoints, then analyze terrain.
+                </p>
+                <p class="tiny">
+                  Cyan: DEM route · dashed: spherical baseline · red: marked
+                  exclusions. Slope speed = entered speed ÷ (1 + 5 ×
+                  |rise/run|), an illustrative slowdown assumption. Steep or
+                  missing-data cells are blocked; search stays within a regional
+                  patch. Individual boulders, small craters, traction, soil and
+                  vehicle dynamics are not resolved. Mark known hazards
+                  yourself; this is not a verified safe driving route.
+                </p>
+              </details>
               <p id="routestatus" aria-live="polite">
                 Click the atlas to place point A.
               </p>
@@ -989,6 +1050,8 @@ Find water ice and collect geological samples</textarea
     <script src="planning.js"></script>
     <script src="interface.js"></script>
     <script src="route-model.js"></script>
+    <script src="terrain-model.js"></script>
     <script src="route.js"></script>
+    <script src="terrain.js"></script>
   </body>
 </html>

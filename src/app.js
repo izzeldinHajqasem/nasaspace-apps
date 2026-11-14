@@ -247,7 +247,7 @@ canvas.onclick = (e) => {
   updateSelectedSite();
 };
 function setMapZoom(f) {
-  z = Math.max(1, Math.min(8, z * f));
+  z = Math.max(1, Math.min(512, z * f));
   center =
     z === 1
       ? [0, 0]

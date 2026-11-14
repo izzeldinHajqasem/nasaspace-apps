@@ -1,6 +1,7 @@
 const HTML = __HTML__;
 const IMAGE = __IMG__;
 const REFERENCE_ASSETS = __ASSETS__;
+__TERRAIN_SERVICE__;
 // Request observer ephemerides at a geodetic surface coordinate (height: 0 km).
 export async function ephemeris(
   body,
@@ -84,6 +85,36 @@ export async function ephemeris(
 export default {
   async fetch(request) {
     const u = new URL(request.url);
+    if (u.pathname === "/api/lunar-terrain") {
+      try {
+        const names = ["alat", "alon", "blat", "blon"];
+        if (
+          names.some(
+            (name) =>
+              !u.searchParams.has(name) ||
+              u.searchParams.get(name).trim() === "",
+          )
+        )
+          return Response.json(
+            { error: "Both terrain endpoints are required." },
+            { status: 400 },
+          );
+        const values = names.map((name) => Number(u.searchParams.get(name)));
+        const start = { lat: values[0], lon: values[1] },
+          end = { lat: values[2], lon: values[3] };
+        try {
+          terrainRequestBounds(start, end);
+        } catch (error) {
+          return Response.json({ error: error.message }, { status: 400 });
+        }
+        const patch = await loadLunarTerrain(start, end);
+        return Response.json(patch, {
+          headers: { "Cache-Control": "public,max-age=86400" },
+        });
+      } catch (error) {
+        return Response.json({ error: error.message }, { status: 502 });
+      }
+    }
     if (u.pathname === "/api/horizons") {
       try {
         const b = u.searchParams.get("body"),

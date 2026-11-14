@@ -39,7 +39,7 @@ def bundle_page():
         f"<style>\n{stylesheet}\n</style>",
     )
 
-    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js", "interface.js", "route-model.js", "route.js"]:
+    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js", "interface.js", "route-model.js", "terrain-model.js", "route.js", "terrain.js"]:
         script = (source_directory / filename).read_text(encoding="utf-8")
         html = html.replace(
             f'<script src="{filename}"></script>',
@@ -55,6 +55,9 @@ def main():
     )
     assets = {"/assets/" + asset.name: base64.b64encode(asset.read_bytes()).decode("ascii") for asset in (PROJECT_ROOT / "src/assets").glob("*.jpg")}
     worker = worker.replace("__ASSETS__", json.dumps(assets))
+    terrain_service = (PROJECT_ROOT / "src/terrain-service.mjs").read_text(encoding="utf-8")
+    terrain_service = terrain_service.replace("export const ", "const ").replace("export function ", "function ").replace("export async function ", "async function ")
+    worker = worker.replace("__TERRAIN_SERVICE__", terrain_service)
     output_path = PROJECT_ROOT / "dist/server/index.mjs"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(worker, encoding="utf-8")
