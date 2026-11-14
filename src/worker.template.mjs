@@ -1,5 +1,6 @@
 const HTML = __HTML__;
 const IMAGE = __IMG__;
+const REFERENCE_ASSETS = __ASSETS__;
 // Request observer ephemerides at a geodetic surface coordinate (height: 0 km).
 export async function ephemeris(
   body,
@@ -140,6 +141,17 @@ export default {
       } catch (e) {
         return Response.json({ error: e.message }, { status: 502 });
       }
+    }
+    if (REFERENCE_ASSETS[u.pathname]) {
+      const bytes = Uint8Array.from(atob(REFERENCE_ASSETS[u.pathname]), (c) =>
+        c.charCodeAt(0),
+      );
+      return new Response(bytes, {
+        headers: {
+          "Content-Type": "image/jpeg",
+          "Cache-Control": "public,max-age=86400",
+        },
+      });
     }
     if (u.pathname === "/moon.jpg") {
       const bytes = Uint8Array.from(atob(IMAGE), (c) => c.charCodeAt(0));

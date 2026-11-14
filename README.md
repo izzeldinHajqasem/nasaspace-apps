@@ -77,3 +77,11 @@ The editable budget starts with a one-way lunar example **from low Earth parking
 The visibility report uses `/api/horizons?detail=1` for the selected target, surface coordinate, epoch and a separate 1–60 Earth-day window. Sampling is every 15 minutes for windows up to seven days, hourly otherwise. It linearly interpolates zero-elevation crossings and integrates time above the horizon, providing next sunset, sunrise, Earthset, Earthrise, total sunlight hours, longest estimated sunlit interval within the window, and time-weighted Earth visibility. Timeline bands and JSON export carry the same report. Changes to target, site, epoch or window invalidate old results.
 
 All visibility uses the apparent airless Sun/Earth **center** elevation above 0°, not terrain or disk-limb contact. Time estimates have sample-scale uncertainty and may miss events between samples. No refraction, local terrain shadows, eclipses, occultation by another body, antenna constraints or communication link budget is modeled. A missing crossing means none was detected in the requested window, not that a body never sets. These percentages describe geometric elevation, not guaranteed solar power or a usable Earth link.
+
+## SELINOVA interface
+
+The visual layout follows the user-provided `SELINOVA.pdf`: an Earth home screen, navy destination navigation, a left mission inspector, a lunar overview, and separate mission-tool drawers. `src/interface.js` manages view switching, destination search, historical-site navigation, the collapsible inspector and live readout mirrors.
+
+`src/assets/earth-home.jpg` and `src/assets/lunar-overview.jpg` are unmodified raster images extracted from that supplied design reference. Their original licensing is not specified by this repository; no new license is asserted. They are presentation assets. The perspective overview and its schematic pins are not a georeferenced terrain model. The separate **Coordinate atlas** retains the original map and coordinate calculations.
+
+The build embeds these two images into the Worker and serves them under `/assets/`. Budget, transfer, recommendation, Horizons, visibility and JSON-export calculations retain their existing behavior. Use **Find Data** to request single-site conditions and the horizon-window report together; detailed tools are available in the bottom toolbar.

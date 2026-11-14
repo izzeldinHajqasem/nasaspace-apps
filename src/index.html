@@ -3,347 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Lunar Landing Site Navigator</title>
+    <title>SELINOVA · Lunar Landing Site Navigator</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header>
-      <div class="logo">◒</div>
-      <div><b>SELENE</b><br /><small>MISSION DESIGN LAB</small></div>
-      <nav>
-        <a class="active" href="#">Site navigator</a
-        ><a href="#" id="guide">Mission guide ↗</a
-        ><a href="#" id="sources">Data & methodology ↗</a>
-      </nav>
-      <span class="badge">✦ NASA SPACE APPS CONCEPT</span>
-    </header>
-    <main>
-      <div class="intro">
-        <div>
-          <div class="eyebrow">EXPLORE / ANALYZE / PLAN</div>
-          <h1>Lunar Landing Site Navigator</h1>
-          <p>Every great mission starts with the right place to land.</p>
-        </div>
-        <button id="export" class="btn outline">↓ &nbsp; Export mission</button>
+    <aside class="destination-nav" aria-label="Solar system navigation">
+      <a class="nav-brand" href="#home">SELINOVA<span>MISSION EXPLORER</span></a
+      ><label class="search-wrap"
+        ><span>⌕</span
+        ><input
+          id="destinationsearch"
+          type="search"
+          placeholder="Search destinations"
+          aria-label="Search destinations" /></label
+      ><button class="nav-home" data-home>Home <span>›</span></button>
+      <div id="destinationlist">
+        <button data-target="199">Mercury<span>›</span></button
+        ><button data-target="299">Venus<span>›</span></button>
+        <details open>
+          <summary>Earth</summary>
+          <button data-target="301" class="nav-moon">Moon</button>
+        </details>
+        <button data-target="499">Mars<span>›</span></button>
+        <details>
+          <summary>Jupiter</summary>
+          <button data-target="501">Io</button
+          ><button data-target="502">Europa</button
+          ><button data-target="503">Ganymede</button
+          ><button data-target="504">Callisto</button>
+        </details>
+        <details>
+          <summary>Saturn</summary>
+          <button data-target="606">Titan</button
+          ><button data-target="602">Enceladus</button
+          ><button data-target="601">Mimas</button
+          ><button data-target="603">Tethys</button
+          ><button data-target="604">Dione</button
+          ><button data-target="605">Rhea</button
+          ><button data-target="608">Iapetus</button>
+        </details>
+        <details>
+          <summary>Uranus</summary>
+          <button data-target="705">Miranda</button
+          ><button data-target="701">Ariel</button
+          ><button data-target="702">Umbriel</button
+          ><button data-target="703">Titania</button
+          ><button data-target="704">Oberon</button>
+        </details>
+        <details>
+          <summary>Neptune</summary>
+          <button data-target="801">Triton</button>
+        </details>
+        <details>
+          <summary>Other destinations</summary>
+          <button data-target="401">Phobos</button
+          ><button data-target="402">Deimos</button
+          ><button data-target="901">Charon</button
+          ><button data-target="999">Pluto</button>
+        </details>
+        <details id="historynav">
+          <summary>Past Landing Sites</summary>
+          <button data-history="0.674,23.473,Apollo 11">Apollo 11</button
+          ><button data-history="-3.012,-23.422,Apollo 12">Apollo 12</button
+          ><button data-history="7.08,-64.37,Luna 9">Luna 9</button
+          ><button data-history="-2.474,-43.339,Surveyor 1">Surveyor 1</button
+          ><button data-history="38.315,-35.008,Lunokhod 1">Lunokhod 1</button
+          ><button data-history="25.85,30.45,Lunokhod 2">Lunokhod 2</button>
+        </details>
       </div>
-      <section class="panel flight-panel">
-        <div class="section">
-          <div class="eyebrow">MANEUVERS + RESERVE</div>
-          <h2>Final mission Δv budget</h2>
-          <p>
-            Editable lunar example from low Earth parking orbit to the surface.
-            This is a velocity-change budget, not a money budget or a trajectory
-            solver. Replace every value for your mission; the preset does not
-            adapt to other destinations.
-          </p>
-          <div class="budget-rows">
-            <label for="budgetlaunch"
-              >Earth surface → parking orbit<span class="tiny"
-                >Launch rocket</span
-              ><input
-                id="budgetlaunch"
-                type="number"
-                min="0"
-                step="any"
-                value="0"
-                required
-                aria-label="Earth surface → parking orbit delta v in metres per second" /></label
-            ><label for="budgetdeparture"
-              >Departure / transfer injection<span class="tiny"
-                >Transfer vehicle</span
-              ><input
-                id="budgetdeparture"
-                type="number"
-                min="0"
-                step="any"
-                value="3150"
-                required
-                aria-label="Departure / transfer injection delta v in metres per second" /></label
-            ><label for="budgetcorrections"
-              >Course corrections<span class="tiny">Transfer vehicle</span
-              ><input
-                id="budgetcorrections"
-                type="number"
-                min="0"
-                step="any"
-                value="50"
-                required
-                aria-label="Course corrections delta v in metres per second" /></label
-            ><label for="budgetcapture"
-              >Destination orbit insertion<span class="tiny"
-                >Transfer vehicle</span
-              ><input
-                id="budgetcapture"
-                type="number"
-                min="0"
-                step="any"
-                value="900"
-                required
-                aria-label="Destination orbit insertion delta v in metres per second" /></label
-            ><label for="budgetlanding"
-              >Descent and landing<span class="tiny">Lander</span
-              ><input
-                id="budgetlanding"
-                type="number"
-                min="0"
-                step="any"
-                value="1900"
-                required
-                aria-label="Descent and landing delta v in metres per second" /></label
-            ><label for="budgetascent"
-              >Surface ascent (return)<span class="tiny">Return vehicle</span
-              ><input
-                id="budgetascent"
-                type="number"
-                min="0"
-                step="any"
-                value="0"
-                required
-                aria-label="Surface ascent (return) delta v in metres per second" /></label
-            ><label for="budgetreturn"
-              >Return departure<span class="tiny">Return vehicle</span
-              ><input
-                id="budgetreturn"
-                type="number"
-                min="0"
-                step="any"
-                value="0"
-                required
-                aria-label="Return departure delta v in metres per second" /></label
-            ><label for="budgetother"
-              >Other maneuvers<span class="tiny">Transfer vehicle</span
-              ><input
-                id="budgetother"
-                type="number"
-                min="0"
-                step="any"
-                value="0"
-                required
-                aria-label="Other maneuvers delta v in metres per second"
-            /></label>
-          </div>
-          <div class="flight-grid">
-            <label
-              >Reserve · %<input
-                id="budgetreserve"
-                type="number"
-                min="0"
-                max="100"
-                step="any"
-                value="15"
-                required
-            /></label>
-            <div>
-              <span class="tiny">MANEUVER SUBTOTAL</span>
-              <h3 id="budgetsubtotal">—</h3>
-            </div>
-            <div>
-              <span class="tiny">RESERVE</span>
-              <h3 id="budgetmargin">—</h3>
-            </div>
-            <div>
-              <span class="tiny">FINAL MISSION Δv</span>
-              <h3 id="budgettotal">—</h3>
-            </div>
-          </div>
-          <p id="budgetvehicles" class="tiny"></p>
-          <div class="pair">
-            <label
-              >Vehicle allocation to copy<select id="budgetvehicle">
-                <option>Transfer vehicle</option>
-                <option>Lander</option>
-                <option>Launch rocket</option>
-                <option>Return vehicle</option>
-              </select></label
-            >
-            <div>
-              <button id="applybudget" class="btn wide">
-                Use this vehicle’s Δv ↗
-              </button>
-            </div>
-          </div>
-          <button
-            id="budgetpreset"
-            class="btn outline"
-            style="margin-top: 12px"
-          >
-            Reset lunar one-way example
+      <p id="searchstatus" class="tiny" aria-live="polite"></p>
+      <div class="nav-bottom">
+        <button id="guide">Mission guide ↗</button
+        ><button id="sources">Data & methodology ↗</button
+        ><span class="plane-symbol" aria-hidden="true">✈</span>
+        <p>NASA SPACE APPS<br />Independent project concept</p>
+      </div>
+    </aside>
+    <main class="app-main">
+      <section id="homeview" class="home-view">
+        <div class="home-top">
+          <span>SPACE IS THE BEGINNING.</span><span>01 / SOLAR SYSTEM</span>
+        </div>
+        <div class="hero-title">
+          <p>YOUR NEXT MISSION STARTS HERE</p>
+          <h1>SELINOVA</h1>
+          <button id="exploremoon" class="hero-enter">
+            Explore the Moon <span>↗</span>
           </button>
-          <p id="budgetstatus" class="status" aria-live="polite"></p>
-          <div class="note" style="margin-top: 12px">
-            All values are in m/s. Earth launch and return default to 0
-            (excluded). Enter them if required. Reserve applies to each vehicle
-            equally. The total across stages must not be entered as one
-            vehicle’s propellant requirement. Transfer/lander/return assignments
-            are a simplified allocation; independently size each real stage and
-            its changing mass.
-          </div>
+        </div>
+        <div class="home-bottom">
+          <p>A world of possibilities.<br />A better place to land.</p>
+          <span>EXPLORE · ANALYZE · PLAN</span>
         </div>
       </section>
-      <section class="panel flight-panel">
-        <div class="section">
-          <div class="eyebrow">LAUNCH → TRANSFER → LANDING</div>
-          <h2>Launch & arrival planner</h2>
-          <p>
-            Choose an Earth launch site and departure time. Estimate a lunar
-            transfer or supply a cruise duration for another destination.
-          </p>
-          <div class="flight-grid">
-            <label
-              >Earth launch location<select id="launchpad">
-                <option value="kennedy">Kennedy Space Center · LC-39A</option>
-                <option value="baikonur">Baikonur</option>
-                <option value="kourou">Guiana Space Centre</option>
-                <option value="satish">Satish Dhawan</option>
-                <option value="custom">Custom Earth location</option>
-              </select></label
-            >
-            <label
-              >Launch time · UTC<input
-                id="departure"
-                type="datetime-local"
-                value="2026-11-14T00:00"
-                required
-            /></label>
-            <label
-              >Launch latitude · °N<input
-                id="launchlat"
-                type="number"
-                min="-90"
-                max="90"
-                step="any"
-                value="28.6084"
-                required
-            /></label>
-            <label
-              >Launch longitude · °E<input
-                id="launchlon"
-                type="number"
-                min="-180"
-                max="180"
-                step="any"
-                value="-80.6043"
-                required
-            /></label>
-            <label
-              >Transfer model<select id="transfermode">
-                <option value="lunar">Ideal Earth → Moon transfer</option>
-                <option value="manual">
-                  Supplied cruise duration · any destination
-                </option>
-              </select></label
-            >
-            <label
-              >Earth parking altitude · km<input
-                id="parking"
-                type="number"
-                min="0"
-                step="any"
-                value="200"
-                required
-            /></label>
-            <label
-              >Earth–Moon center distance · km<input
-                id="moondistance"
-                type="number"
-                min="1"
-                step="any"
-                value="384400"
-                required
-            /></label>
-            <label
-              >Supplied cruise duration · Earth days<input
-                id="cruisedays"
-                type="number"
-                min="0.001"
-                max="100000"
-                step="any"
-                value="3"
-                required
-            /></label>
-            <label
-              >Ascent to parking orbit · min<input
-                id="ascent"
-                type="number"
-                min="0"
-                step="any"
-                value="12"
-                required
-            /></label>
-            <label
-              >Terminal descent start height · km<input
-                id="descentheight"
-                type="number"
-                min="0.001"
-                step="any"
-                value="10"
-                required
-            /></label>
-            <label
-              >Assumed downward speed · m/s<input
-                id="downspeed"
-                type="number"
-                min="0.001"
-                step="any"
-                value="50"
-                required
-            /></label>
-            <label
-              >Assumed horizontal speed · m/s<input
-                id="horizspeed"
-                type="number"
-                min="0"
-                step="any"
-                value="10"
-                required
-            /></label>
-          </div>
-          <p id="launchdetails" class="tiny"></p>
-        </div>
-        <div class="section">
-          <div class="flight-grid">
-            <div>
-              <span class="tiny">LAUNCH TO TOUCHDOWN</span>
-              <h3 id="flighttime">—</h3>
-            </div>
-            <div>
-              <span class="tiny">ESTIMATED TOUCHDOWN · UTC</span>
-              <h3 id="touchdown">—</h3>
-            </div>
-            <div>
-              <span class="tiny">TERMINAL APPROACH ANGLE</span>
-              <h3 id="approachangle">—</h3>
-            </div>
-            <div>
-              <span class="tiny">DESTINATION SURFACE ESCAPE SPEED</span>
-              <h3 id="targetescape">—</h3>
-            </div>
-          </div>
-          <p id="timelineparts" class="tiny"></p>
-          <p id="flightstatus" class="status" aria-live="polite"></p>
-          <button id="usearrival" class="btn outline" style="margin: 14px 0">
-            Use touchdown as mission epoch ↗
-          </button>
-          <div class="note">
-            Illustrative timing, not a flight plan. Launch coordinates do not
-            alter transfer time. Ideal lunar cruise is half an Earth-centered
-            ellipse; Moon motion, alignment, capture, plane changes, staging
-            delays, and powered landing dynamics are omitted. Terminal descent
-            assumes constant entered speeds: angle = atan2(downward,
-            horizontal); 90° means vertical descent. These are not predicted
-            touchdown speeds. Mission duration starts at the mission epoch; use
-            the button to align it with estimated arrival.
-          </div>
-        </div>
-      </section>
-      <div class="workspace">
-        <aside class="panel">
+      <section id="explorerview" class="explorer-view" hidden>
+        <aside class="mission-inspector">
           <div class="section">
-            <h2>01 &nbsp; Mission brief</h2>
+            <h2>Mission parameters</h2>
             <label for="body">Destination</label
             ><select id="body"></select>
             <div id="custom" hidden>
@@ -443,236 +203,681 @@ Find water ice and collect geological samples</textarea
               </button>
             </div>
           </div>
-          <div class="section">
-            <h2>02 &nbsp; Vehicle parameters</h2>
-            <label for="alt">Circular orbit altitude · km</label
-            ><input id="alt" type="number" min="0" step="1" value="100" />
-            <div class="pair">
-              <div>
-                <label for="mass">Dry mass · kg</label
-                ><input id="mass" type="number" min="1" value="1500" />
-              </div>
-              <div>
-                <label for="isp">Engine Isp · s</label
-                ><input id="isp" type="number" min="1" value="320" />
-              </div>
-            </div>
-            <label for="dv">Mission Δv budget · m/s</label
-            ><input id="dv" type="number" min="0" value="2000" /><button
-              class="btn wide"
-              id="analyze"
-            >
-              Analyze landing site &nbsp; ↗
-            </button>
-            <div id="status" class="status">
-              Ready to query NASA JPL Horizons.
-            </div>
+          <div class="inspector-summary">
+            <h2>Mission readout</h2>
+            <dl>
+              <dt>Earth to site</dt>
+              <dd data-mirror="flighttime">—</dd>
+              <dt>Escape velocity</dt>
+              <dd data-mirror="escape">—</dd>
+              <dt>Solar elevation</dt>
+              <dd data-mirror="sun">—</dd>
+              <dt>Next Earthset</dt>
+              <dd data-mirror="earthsettime">—</dd>
+              <dt>Next sunset</dt>
+              <dd data-mirror="sunsettime">—</dd>
+              <dt>Sunlight duration</dt>
+              <dd data-mirror="sunlighthours">—</dd>
+              <dt>Earth visibility</dt>
+              <dd data-mirror="earthvisibility">—</dd>
+            </dl>
+            <button id="finddata" class="btn wide">Find Data</button>
+            <p id="findstatus" class="tiny" aria-live="polite">
+              Choose a site to retrieve live conditions.
+            </p>
           </div>
-        </aside>
-        <div>
-          <section class="panel planner-results">
-            <div class="eyebrow">MISSION-MATCHED SHORTLIST</div>
-            <h2>Where should your mission land?</h2>
-            <p id="recstatus" aria-live="polite">
-              Describe your mission, choose a destination, and find landing
-              options.
-            </p>
-            <div id="recommendations"></div>
-            <p class="tiny" style="margin-top: 14px">
-              Ranked among three candidate areas, not every location. Science
-              fit uses disclosed illustrative heuristics, not terrain analysis.
-              Horizons samples 25 times across your duration; percentages are
-              sampled geometry, not guaranteed power or communication
-              availability. Other bodies use exploratory coordinates when no
-              curated areas exist. No local shadows, eclipses, weather,
-              radiation, or landing safety assessment. Gas giants have no solid
-              landing surface and are excluded.
-            </p>
-          </section>
-          <section class="panel">
-            <div class="maphead">
-              <strong id="maptitle"
-                >The Moon
-                <span style="color: #89917f">/ Surface explorer</span></strong
-              ><span class="tag">EQUIRECTANGULAR</span>
-            </div>
-            <div class="mapbox">
-              <canvas
-                id="map"
-                aria-label="Interactive moon surface map. Click to select coordinates; coordinate inputs also available."
-              ></canvas>
-              <div class="maplabel" id="maplabel">LUNAR GLOBAL MOSAIC</div>
-              <div class="mapcontrols">
-                <button id="zin" aria-label="Zoom in">+</button
-                ><button id="zout" aria-label="Zoom out">−</button
-                ><button id="reset" aria-label="Reset map">⌖</button>
+          <details class="vehicle-details">
+            <summary>Vehicle parameters &amp; analysis</summary>
+            <div class="section">
+              <h2>02 &nbsp; Vehicle parameters</h2>
+              <label for="alt">Circular orbit altitude · km</label
+              ><input id="alt" type="number" min="0" step="1" value="100" />
+              <div class="pair">
+                <div>
+                  <label for="mass">Dry mass · kg</label
+                  ><input id="mass" type="number" min="1" value="1500" />
+                </div>
+                <div>
+                  <label for="isp">Engine Isp · s</label
+                  ><input id="isp" type="number" min="1" value="320" />
+                </div>
               </div>
-              <div class="legend">
-                <span class="dot"></span>Selected site &nbsp; + &nbsp; Historic
-                landing sites
-              </div>
-            </div>
-            <div class="mapfoot">
-              <span id="credit">Imagery: Solar System Scope · CC BY 4.0</span
-              ><span id="zoom"
-                >1.0× &nbsp; / &nbsp; Click map to select a site</span
+              <label for="dv">Mission Δv budget · m/s</label
+              ><input id="dv" type="number" min="0" value="2000" /><button
+                class="btn wide"
+                id="analyze"
               >
+                Analyze landing site &nbsp; ↗
+              </button>
+              <div id="status" class="status">
+                Ready to query NASA JPL Horizons.
+              </div>
             </div>
-          </section>
-          <section class="panel sitebar">
-            <div>
-              <div class="eyebrow">SELECTED LANDING SITE</div>
-              <b id="sitename">Apollo 11 · Sea of Tranquility</b>
-              <p class="tiny" id="coords">0.674° N &nbsp; 23.473° E</p>
-            </div>
-            <span class="badge">◎ &nbsp; SURFACE TARGET</span>
-          </section>
-          <div class="bottom">
-            <div class="panel stat">
-              <span class="tiny">SURFACE GRAVITY</span>
-              <div class="num" id="gravity">1.625 <span>m/s²</span></div>
-              <p class="tiny">Spherical-body estimate</p>
-            </div>
-            <div class="panel stat">
-              <span class="tiny">ESCAPE VELOCITY</span>
-              <div class="num" id="escape">2.376 <span>km/s</span></div>
-              <p class="tiny">At mean surface radius</p>
-            </div>
-            <div class="panel stat">
-              <span class="tiny">ORBITAL PERIOD</span>
-              <div class="num" id="period">117.8 <span>min</span></div>
-              <p class="tiny">At selected orbit altitude</p>
-            </div>
-          </div>
-        </div>
-        <aside class="panel results">
-          <div class="section">
-            <h2>Site conditions <span style="color: var(--lime)">↗</span></h2>
-            <div class="tiny">NASA / JPL HORIZONS</div>
-            <div class="metric">
-              <div class="top">Solar elevation <span>☀</span></div>
-              <div class="value" id="sun">— <small>deg</small></div>
-              <p class="tiny" id="sunhint">Analyze to retrieve illumination</p>
-            </div>
-            <div class="metric">
-              <div class="top">Earth elevation <span>◉</span></div>
-              <div class="value" id="earth">— <small>deg</small></div>
-              <p class="tiny" id="earthhint">Geometric line of sight</p>
-            </div>
-            <div class="metric">
-              <div class="top">Earth range <span>↔</span></div>
-              <div class="value" id="range">— <small>km</small></div>
-              <p class="tiny" id="delay">One-way light time: —</p>
-            </div>
-          </div>
-          <div class="section">
-            <h2>Mission estimates</h2>
-            <div class="metric">
-              <div class="top">Circular orbit velocity</div>
-              <div class="value" id="velocity">1.633 <small>km/s</small></div>
-            </div>
-            <div class="metric">
-              <div class="top">Ideal propellant required</div>
-              <div class="value" id="fuel">1,337 <small>kg</small></div>
-              <p class="tiny">Rocket equation · selected Δv</p>
-            </div>
-            <div class="note">
-              Concept planning only. Terrain slope, hazards, local shadows,
-              eclipses, atmosphere, and landing losses are not modeled.
-            </div>
-          </div>
+          </details>
         </aside>
-      </div>
-      <section class="panel flight-panel">
-        <div class="section">
-          <div class="eyebrow">SUNLIGHT & EARTH ABOVE THE HORIZON</div>
-          <h2>Sunset, Earthset & visibility window</h2>
-          <p>
-            Uses the selected destination, landing coordinate, and mission epoch
-            above. The visibility window is independent of the mission duration.
-          </p>
-          <div class="pair">
-            <label
-              >Visibility window · Earth days<input
-                id="horizondays"
-                type="number"
-                min="1"
-                max="60"
-                step="1"
-                value="14"
-                required
-            /></label>
+        <div class="explorer-stage">
+          <div class="stage-top">
             <div>
-              <button id="calculatevisibility" class="btn wide">
-                Calculate visibility ↗
+              <span class="eyebrow">SURFACE EXPLORER</span>
+              <h1 id="scenetitle">The Moon</h1>
+            </div>
+            <div class="view-switch">
+              <button id="overviewtab" class="active">Overview</button
+              ><button id="atlastab">Coordinate atlas</button>
+            </div>
+          </div>
+          <div id="sceneview" class="scene-view">
+            <div class="earth-orb" aria-hidden="true"></div>
+            <div class="sun-flare" aria-hidden="true"></div>
+            <div id="scenepins">
+              <button
+                class="scene-pin red"
+                style="left: 40%; top: 37%"
+                data-landing="-13.4,-2.8,Alphonsus"
+                aria-label="Select Alphonsus"
+              >
+                <i></i><span>Alphonsus</span></button
+              ><button
+                class="scene-pin green"
+                style="left: 16%; top: 56%"
+                data-landing="18,-57,Oceanus Procellarum"
+                aria-label="Select Oceanus Procellarum"
+              >
+                <i></i><span>Oceanus Procellarum</span></button
+              ><button
+                class="scene-pin green"
+                style="left: 55%; top: 54%"
+                data-landing="-89.5,0,Shackleton rim region"
+                aria-label="Select Shackleton rim region"
+              >
+                <i></i><span>Shackleton rim region</span></button
+              ><button
+                class="scene-pin red"
+                style="left: 84%; top: 55%"
+                data-landing="-44.45,177.6,Von Kármán crater"
+                aria-label="Select Von Kármán crater"
+              >
+                <i></i><span>Von Kármán crater</span></button
+              ><button
+                class="scene-pin green"
+                style="left: 62%; top: 77%"
+                data-landing="0.674,23.473,Mare Tranquillitatis"
+                aria-label="Select Mare Tranquillitatis"
+              >
+                <i></i><span>Mare Tranquillitatis</span>
               </button>
             </div>
-          </div>
-          <p id="horizonrange" class="tiny"></p>
-          <div class="flight-grid">
-            <div>
-              <span class="tiny">NEXT SUNSET · ESTIMATED</span>
-              <h3 id="sunsettime">—</h3>
-              <span class="tiny">NEXT SUNRISE</span>
-              <p id="sunrisetime">—</p>
-            </div>
-            <div>
-              <span class="tiny">NEXT EARTHSET · ESTIMATED</span>
-              <h3 id="earthsettime">—</h3>
-              <span class="tiny">NEXT EARTHRISE</span>
-              <p id="earthrisetime">—</p>
-            </div>
-            <div>
-              <span class="tiny">TOTAL SUN ABOVE HORIZON</span>
-              <h3 id="sunlighthours">—</h3>
-              <span class="tiny">LONGEST ESTIMATED SUNLIT INTERVAL</span>
-              <p id="longestsunlight">—</p>
-            </div>
-            <div>
-              <span class="tiny">EARTH ABOVE HORIZON</span>
-              <h3 id="earthvisibility">—</h3>
-              <p class="tiny">Time-weighted portion of this window</p>
+            <div class="scene-caption">
+              Illustrative lunar overview · pins are schematic<br />Use
+              Coordinate atlas for mapped positions.
             </div>
           </div>
-          <label>Sun above geometric horizon</label>
-          <div
-            id="suntrack"
-            class="visibility-track"
-            aria-label="Sun above horizon timeline"
-          ></div>
-          <label>Earth above geometric horizon</label>
-          <div
-            id="earthtrack"
-            class="visibility-track earth-track"
-            aria-label="Earth above horizon timeline"
-          ></div>
-          <p class="tiny">
-            Colored bands: estimated time above 0°. Dark bands: below or on the
-            horizon. Timeline runs from start to end of the selected window.
-          </p>
-          <p id="horizonstatus" class="status" aria-live="polite">
-            Calculate to retrieve live JPL Horizons samples.
-          </p>
-          <div class="note" style="margin-top: 12px">
-            Geometric Sun/Earth center elevation, with linear interpolation at
-            15-minute sampling (up to 7 days) or hourly sampling (8–60 days).
-            Events between samples may be missed. Sunlight excludes eclipses and
-            terrain shadows; Earth visibility excludes occultations, terrain,
-            antennas, and communications link requirements. Duration and
-            crossing times are estimates. “No crossing detected” applies only to
-            this window.
+          <div id="atlasview" class="atlas-view" hidden>
+            <section class="panel">
+              <div class="maphead">
+                <strong id="maptitle"
+                  >The Moon
+                  <span style="color: #89917f">/ Surface explorer</span></strong
+                ><span class="tag">EQUIRECTANGULAR</span>
+              </div>
+              <div class="mapbox">
+                <canvas
+                  id="map"
+                  aria-label="Interactive moon surface map. Click to select coordinates; coordinate inputs also available."
+                ></canvas>
+                <div class="maplabel" id="maplabel">LUNAR GLOBAL MOSAIC</div>
+                <div class="mapcontrols">
+                  <button id="zin" aria-label="Zoom in">+</button
+                  ><button id="zout" aria-label="Zoom out">−</button
+                  ><button id="reset" aria-label="Reset map">⌖</button>
+                </div>
+                <div class="legend">
+                  <span class="dot"></span>Selected site &nbsp; + &nbsp;
+                  Historic landing sites
+                </div>
+              </div>
+              <div class="mapfoot">
+                <span id="credit">Imagery: Solar System Scope · CC BY 4.0</span
+                ><span id="zoom"
+                  >1.0× &nbsp; / &nbsp; Click map to select a site</span
+                >
+              </div>
+            </section>
+            <section class="panel sitebar">
+              <div>
+                <div class="eyebrow">SELECTED LANDING SITE</div>
+                <b id="sitename">Apollo 11 · Sea of Tranquility</b>
+                <p class="tiny" id="coords">0.674° N &nbsp; 23.473° E</p>
+              </div>
+              <span class="badge">◎ &nbsp; SURFACE TARGET</span>
+            </section>
+            <div class="bottom">
+              <div class="panel stat">
+                <span class="tiny">SURFACE GRAVITY</span>
+                <div class="num" id="gravity">1.625 <span>m/s²</span></div>
+                <p class="tiny">Spherical-body estimate</p>
+              </div>
+              <div class="panel stat">
+                <span class="tiny">ESCAPE VELOCITY</span>
+                <div class="num" id="escape">2.376 <span>km/s</span></div>
+                <p class="tiny">At mean surface radius</p>
+              </div>
+              <div class="panel stat">
+                <span class="tiny">ORBITAL PERIOD</span>
+                <div class="num" id="period">117.8 <span>min</span></div>
+                <p class="tiny">At selected orbit altitude</p>
+              </div>
+            </div>
           </div>
+          <button
+            id="toggleinspector"
+            class="inspector-toggle"
+            aria-label="Collapse mission parameters"
+            aria-expanded="true"
+          >
+            ‹
+          </button>
+          <div class="scene-tools">
+            <button data-tool="shortlist">Landing options</button
+            ><button data-tool="launch">Launch & arrival</button
+            ><button data-tool="budget">Δv budget</button
+            ><button data-tool="visibility">Sun & Earth</button
+            ><button data-tool="conditions">Site data</button
+            ><button id="export">↓ Export</button>
+          </div>
+          <section id="tooldrawer" class="tool-drawer" hidden>
+            <div class="drawer-head">
+              <h2 id="drawertitle">Mission tools</h2>
+              <button id="closedrawer" aria-label="Close mission tools">
+                ✕
+              </button>
+            </div>
+            <div id="tool-shortlist" class="tool-content" hidden>
+              <section class="panel planner-results">
+                <div class="eyebrow">MISSION-MATCHED SHORTLIST</div>
+                <h2>Where should your mission land?</h2>
+                <p id="recstatus" aria-live="polite">
+                  Describe your mission, choose a destination, and find landing
+                  options.
+                </p>
+                <div id="recommendations"></div>
+                <p class="tiny" style="margin-top: 14px">
+                  Ranked among three candidate areas, not every location.
+                  Science fit uses disclosed illustrative heuristics, not
+                  terrain analysis. Horizons samples 25 times across your
+                  duration; percentages are sampled geometry, not guaranteed
+                  power or communication availability. Other bodies use
+                  exploratory coordinates when no curated areas exist. No local
+                  shadows, eclipses, weather, radiation, or landing safety
+                  assessment. Gas giants have no solid landing surface and are
+                  excluded.
+                </p>
+              </section>
+            </div>
+            <div id="tool-launch" class="tool-content" hidden>
+              <section class="panel flight-panel">
+                <div class="section">
+                  <div class="eyebrow">LAUNCH → TRANSFER → LANDING</div>
+                  <h2>Launch & arrival planner</h2>
+                  <p>
+                    Choose an Earth launch site and departure time. Estimate a
+                    lunar transfer or supply a cruise duration for another
+                    destination.
+                  </p>
+                  <div class="flight-grid">
+                    <label
+                      >Earth launch location<select id="launchpad">
+                        <option value="kennedy">
+                          Kennedy Space Center · LC-39A
+                        </option>
+                        <option value="baikonur">Baikonur</option>
+                        <option value="kourou">Guiana Space Centre</option>
+                        <option value="satish">Satish Dhawan</option>
+                        <option value="custom">Custom Earth location</option>
+                      </select></label
+                    >
+                    <label
+                      >Launch time · UTC<input
+                        id="departure"
+                        type="datetime-local"
+                        value="2026-11-14T00:00"
+                        required
+                    /></label>
+                    <label
+                      >Launch latitude · °N<input
+                        id="launchlat"
+                        type="number"
+                        min="-90"
+                        max="90"
+                        step="any"
+                        value="28.6084"
+                        required
+                    /></label>
+                    <label
+                      >Launch longitude · °E<input
+                        id="launchlon"
+                        type="number"
+                        min="-180"
+                        max="180"
+                        step="any"
+                        value="-80.6043"
+                        required
+                    /></label>
+                    <label
+                      >Transfer model<select id="transfermode">
+                        <option value="lunar">
+                          Ideal Earth → Moon transfer
+                        </option>
+                        <option value="manual">
+                          Supplied cruise duration · any destination
+                        </option>
+                      </select></label
+                    >
+                    <label
+                      >Earth parking altitude · km<input
+                        id="parking"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="200"
+                        required
+                    /></label>
+                    <label
+                      >Earth–Moon center distance · km<input
+                        id="moondistance"
+                        type="number"
+                        min="1"
+                        step="any"
+                        value="384400"
+                        required
+                    /></label>
+                    <label
+                      >Supplied cruise duration · Earth days<input
+                        id="cruisedays"
+                        type="number"
+                        min="0.001"
+                        max="100000"
+                        step="any"
+                        value="3"
+                        required
+                    /></label>
+                    <label
+                      >Ascent to parking orbit · min<input
+                        id="ascent"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="12"
+                        required
+                    /></label>
+                    <label
+                      >Terminal descent start height · km<input
+                        id="descentheight"
+                        type="number"
+                        min="0.001"
+                        step="any"
+                        value="10"
+                        required
+                    /></label>
+                    <label
+                      >Assumed downward speed · m/s<input
+                        id="downspeed"
+                        type="number"
+                        min="0.001"
+                        step="any"
+                        value="50"
+                        required
+                    /></label>
+                    <label
+                      >Assumed horizontal speed · m/s<input
+                        id="horizspeed"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="10"
+                        required
+                    /></label>
+                  </div>
+                  <p id="launchdetails" class="tiny"></p>
+                </div>
+                <div class="section">
+                  <div class="flight-grid">
+                    <div>
+                      <span class="tiny">LAUNCH TO TOUCHDOWN</span>
+                      <h3 id="flighttime">—</h3>
+                    </div>
+                    <div>
+                      <span class="tiny">ESTIMATED TOUCHDOWN · UTC</span>
+                      <h3 id="touchdown">—</h3>
+                    </div>
+                    <div>
+                      <span class="tiny">TERMINAL APPROACH ANGLE</span>
+                      <h3 id="approachangle">—</h3>
+                    </div>
+                    <div>
+                      <span class="tiny">DESTINATION SURFACE ESCAPE SPEED</span>
+                      <h3 id="targetescape">—</h3>
+                    </div>
+                  </div>
+                  <p id="timelineparts" class="tiny"></p>
+                  <p id="flightstatus" class="status" aria-live="polite"></p>
+                  <button
+                    id="usearrival"
+                    class="btn outline"
+                    style="margin: 14px 0"
+                  >
+                    Use touchdown as mission epoch ↗
+                  </button>
+                  <div class="note">
+                    Illustrative timing, not a flight plan. Launch coordinates
+                    do not alter transfer time. Ideal lunar cruise is half an
+                    Earth-centered ellipse; Moon motion, alignment, capture,
+                    plane changes, staging delays, and powered landing dynamics
+                    are omitted. Terminal descent assumes constant entered
+                    speeds: angle = atan2(downward, horizontal); 90° means
+                    vertical descent. These are not predicted touchdown speeds.
+                    Mission duration starts at the mission epoch; use the button
+                    to align it with estimated arrival.
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div id="tool-budget" class="tool-content" hidden>
+              <section class="panel flight-panel">
+                <div class="section">
+                  <div class="eyebrow">MANEUVERS + RESERVE</div>
+                  <h2>Final mission Δv budget</h2>
+                  <p>
+                    Editable lunar example from low Earth parking orbit to the
+                    surface. This is a velocity-change budget, not a money
+                    budget or a trajectory solver. Replace every value for your
+                    mission; the preset does not adapt to other destinations.
+                  </p>
+                  <div class="budget-rows">
+                    <label for="budgetlaunch"
+                      >Earth surface → parking orbit<span class="tiny"
+                        >Launch rocket</span
+                      ><input
+                        id="budgetlaunch"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="0"
+                        required
+                        aria-label="Earth surface → parking orbit delta v in metres per second" /></label
+                    ><label for="budgetdeparture"
+                      >Departure / transfer injection<span class="tiny"
+                        >Transfer vehicle</span
+                      ><input
+                        id="budgetdeparture"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="3150"
+                        required
+                        aria-label="Departure / transfer injection delta v in metres per second" /></label
+                    ><label for="budgetcorrections"
+                      >Course corrections<span class="tiny"
+                        >Transfer vehicle</span
+                      ><input
+                        id="budgetcorrections"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="50"
+                        required
+                        aria-label="Course corrections delta v in metres per second" /></label
+                    ><label for="budgetcapture"
+                      >Destination orbit insertion<span class="tiny"
+                        >Transfer vehicle</span
+                      ><input
+                        id="budgetcapture"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="900"
+                        required
+                        aria-label="Destination orbit insertion delta v in metres per second" /></label
+                    ><label for="budgetlanding"
+                      >Descent and landing<span class="tiny">Lander</span
+                      ><input
+                        id="budgetlanding"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="1900"
+                        required
+                        aria-label="Descent and landing delta v in metres per second" /></label
+                    ><label for="budgetascent"
+                      >Surface ascent (return)<span class="tiny"
+                        >Return vehicle</span
+                      ><input
+                        id="budgetascent"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="0"
+                        required
+                        aria-label="Surface ascent (return) delta v in metres per second" /></label
+                    ><label for="budgetreturn"
+                      >Return departure<span class="tiny">Return vehicle</span
+                      ><input
+                        id="budgetreturn"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="0"
+                        required
+                        aria-label="Return departure delta v in metres per second" /></label
+                    ><label for="budgetother"
+                      >Other maneuvers<span class="tiny">Transfer vehicle</span
+                      ><input
+                        id="budgetother"
+                        type="number"
+                        min="0"
+                        step="any"
+                        value="0"
+                        required
+                        aria-label="Other maneuvers delta v in metres per second"
+                    /></label>
+                  </div>
+                  <div class="flight-grid">
+                    <label
+                      >Reserve · %<input
+                        id="budgetreserve"
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="any"
+                        value="15"
+                        required
+                    /></label>
+                    <div>
+                      <span class="tiny">MANEUVER SUBTOTAL</span>
+                      <h3 id="budgetsubtotal">—</h3>
+                    </div>
+                    <div>
+                      <span class="tiny">RESERVE</span>
+                      <h3 id="budgetmargin">—</h3>
+                    </div>
+                    <div>
+                      <span class="tiny">FINAL MISSION Δv</span>
+                      <h3 id="budgettotal">—</h3>
+                    </div>
+                  </div>
+                  <p id="budgetvehicles" class="tiny"></p>
+                  <div class="pair">
+                    <label
+                      >Vehicle allocation to copy<select id="budgetvehicle">
+                        <option>Transfer vehicle</option>
+                        <option>Lander</option>
+                        <option>Launch rocket</option>
+                        <option>Return vehicle</option>
+                      </select></label
+                    >
+                    <div>
+                      <button id="applybudget" class="btn wide">
+                        Use this vehicle’s Δv ↗
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    id="budgetpreset"
+                    class="btn outline"
+                    style="margin-top: 12px"
+                  >
+                    Reset lunar one-way example
+                  </button>
+                  <p id="budgetstatus" class="status" aria-live="polite"></p>
+                  <div class="note" style="margin-top: 12px">
+                    All values are in m/s. Earth launch and return default to 0
+                    (excluded). Enter them if required. Reserve applies to each
+                    vehicle equally. The total across stages must not be entered
+                    as one vehicle’s propellant requirement.
+                    Transfer/lander/return assignments are a simplified
+                    allocation; independently size each real stage and its
+                    changing mass.
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div id="tool-visibility" class="tool-content" hidden>
+              <section class="panel flight-panel">
+                <div class="section">
+                  <div class="eyebrow">SUNLIGHT & EARTH ABOVE THE HORIZON</div>
+                  <h2>Sunset, Earthset & visibility window</h2>
+                  <p>
+                    Uses the selected destination, landing coordinate, and
+                    mission epoch above. The visibility window is independent of
+                    the mission duration.
+                  </p>
+                  <div class="pair">
+                    <label
+                      >Visibility window · Earth days<input
+                        id="horizondays"
+                        type="number"
+                        min="1"
+                        max="60"
+                        step="1"
+                        value="14"
+                        required
+                    /></label>
+                    <div>
+                      <button id="calculatevisibility" class="btn wide">
+                        Calculate visibility ↗
+                      </button>
+                    </div>
+                  </div>
+                  <p id="horizonrange" class="tiny"></p>
+                  <div class="flight-grid">
+                    <div>
+                      <span class="tiny">NEXT SUNSET · ESTIMATED</span>
+                      <h3 id="sunsettime">—</h3>
+                      <span class="tiny">NEXT SUNRISE</span>
+                      <p id="sunrisetime">—</p>
+                    </div>
+                    <div>
+                      <span class="tiny">NEXT EARTHSET · ESTIMATED</span>
+                      <h3 id="earthsettime">—</h3>
+                      <span class="tiny">NEXT EARTHRISE</span>
+                      <p id="earthrisetime">—</p>
+                    </div>
+                    <div>
+                      <span class="tiny">TOTAL SUN ABOVE HORIZON</span>
+                      <h3 id="sunlighthours">—</h3>
+                      <span class="tiny"
+                        >LONGEST ESTIMATED SUNLIT INTERVAL</span
+                      >
+                      <p id="longestsunlight">—</p>
+                    </div>
+                    <div>
+                      <span class="tiny">EARTH ABOVE HORIZON</span>
+                      <h3 id="earthvisibility">—</h3>
+                      <p class="tiny">Time-weighted portion of this window</p>
+                    </div>
+                  </div>
+                  <label>Sun above geometric horizon</label>
+                  <div
+                    id="suntrack"
+                    class="visibility-track"
+                    aria-label="Sun above horizon timeline"
+                  ></div>
+                  <label>Earth above geometric horizon</label>
+                  <div
+                    id="earthtrack"
+                    class="visibility-track earth-track"
+                    aria-label="Earth above horizon timeline"
+                  ></div>
+                  <p class="tiny">
+                    Colored bands: estimated time above 0°. Dark bands: below or
+                    on the horizon. Timeline runs from start to end of the
+                    selected window.
+                  </p>
+                  <p id="horizonstatus" class="status" aria-live="polite">
+                    Calculate to retrieve live JPL Horizons samples.
+                  </p>
+                  <div class="note" style="margin-top: 12px">
+                    Geometric Sun/Earth center elevation, with linear
+                    interpolation at 15-minute sampling (up to 7 days) or hourly
+                    sampling (8–60 days). Events between samples may be missed.
+                    Sunlight excludes eclipses and terrain shadows; Earth
+                    visibility excludes occultations, terrain, antennas, and
+                    communications link requirements. Duration and crossing
+                    times are estimates. “No crossing detected” applies only to
+                    this window.
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div id="tool-conditions" class="tool-content" hidden>
+              <aside class="panel results">
+                <div class="section">
+                  <h2>
+                    Site conditions <span style="color: var(--lime)">↗</span>
+                  </h2>
+                  <div class="tiny">NASA / JPL HORIZONS</div>
+                  <div class="metric">
+                    <div class="top">Solar elevation <span>☀</span></div>
+                    <div class="value" id="sun">— <small>deg</small></div>
+                    <p class="tiny" id="sunhint">
+                      Analyze to retrieve illumination
+                    </p>
+                  </div>
+                  <div class="metric">
+                    <div class="top">Earth elevation <span>◉</span></div>
+                    <div class="value" id="earth">— <small>deg</small></div>
+                    <p class="tiny" id="earthhint">Geometric line of sight</p>
+                  </div>
+                  <div class="metric">
+                    <div class="top">Earth range <span>↔</span></div>
+                    <div class="value" id="range">— <small>km</small></div>
+                    <p class="tiny" id="delay">One-way light time: —</p>
+                  </div>
+                </div>
+                <div class="section">
+                  <h2>Mission estimates</h2>
+                  <div class="metric">
+                    <div class="top">Circular orbit velocity</div>
+                    <div class="value" id="velocity">
+                      1.633 <small>km/s</small>
+                    </div>
+                  </div>
+                  <div class="metric">
+                    <div class="top">Ideal propellant required</div>
+                    <div class="value" id="fuel">1,337 <small>kg</small></div>
+                    <p class="tiny">Rocket equation · selected Δv</p>
+                  </div>
+                  <div class="note">
+                    Concept planning only. Terrain slope, hazards, local
+                    shadows, eclipses, atmosphere, and landing losses are not
+                    modeled.
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
         </div>
       </section>
-      <footer>
-        <span
-          >SELENE / A NASA Space Apps Challenge project concept · Not affiliated
-          with NASA</span
-        ><span
-          >JPL Horizons ephemerides &nbsp; · &nbsp; Planetary exploration, made
-          accessible.</span
-        >
-      </footer>
     </main>
     <dialog id="info">
       <h2 id="ititle"></h2>
@@ -688,5 +893,6 @@ Find water ice and collect geological samples</textarea
     <script src="flight.js"></script>
     <script src="planning-model.js"></script>
     <script src="planning.js"></script>
+    <script src="interface.js"></script>
   </body>
 </html>

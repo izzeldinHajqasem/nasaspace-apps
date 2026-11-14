@@ -39,7 +39,7 @@ def bundle_page():
         f"<style>\n{stylesheet}\n</style>",
     )
 
-    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js"]:
+    for filename in ["app.js", "mission-model.js", "recommendations.js", "flight-model.js", "flight.js", "planning-model.js", "planning.js", "interface.js"]:
         script = (source_directory / filename).read_text(encoding="utf-8")
         html = html.replace(
             f'<script src="{filename}"></script>',
@@ -53,6 +53,8 @@ def main():
     worker = template.replace("__HTML__", json.dumps(bundle_page())).replace(
         "__IMG__", json.dumps(load_lunar_texture())
     )
+    assets = {"/assets/" + asset.name: base64.b64encode(asset.read_bytes()).decode("ascii") for asset in (PROJECT_ROOT / "src/assets").glob("*.jpg")}
+    worker = worker.replace("__ASSETS__", json.dumps(assets))
     output_path = PROJECT_ROOT / "dist/server/index.mjs"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(worker, encoding="utf-8")
