@@ -30,6 +30,162 @@
         </div>
         <button id="export" class="btn outline">↓ &nbsp; Export mission</button>
       </div>
+      <section class="panel flight-panel">
+        <div class="section">
+          <div class="eyebrow">LAUNCH → TRANSFER → LANDING</div>
+          <h2>Launch & arrival planner</h2>
+          <p>
+            Choose an Earth launch site and departure time. Estimate a lunar
+            transfer or supply a cruise duration for another destination.
+          </p>
+          <div class="flight-grid">
+            <label
+              >Earth launch location<select id="launchpad">
+                <option value="kennedy">Kennedy Space Center · LC-39A</option>
+                <option value="baikonur">Baikonur</option>
+                <option value="kourou">Guiana Space Centre</option>
+                <option value="satish">Satish Dhawan</option>
+                <option value="custom">Custom Earth location</option>
+              </select></label
+            >
+            <label
+              >Launch time · UTC<input
+                id="departure"
+                type="datetime-local"
+                value="2026-11-14T00:00"
+                required
+            /></label>
+            <label
+              >Launch latitude · °N<input
+                id="launchlat"
+                type="number"
+                min="-90"
+                max="90"
+                step="any"
+                value="28.6084"
+                required
+            /></label>
+            <label
+              >Launch longitude · °E<input
+                id="launchlon"
+                type="number"
+                min="-180"
+                max="180"
+                step="any"
+                value="-80.6043"
+                required
+            /></label>
+            <label
+              >Transfer model<select id="transfermode">
+                <option value="lunar">Ideal Earth → Moon transfer</option>
+                <option value="manual">
+                  Supplied cruise duration · any destination
+                </option>
+              </select></label
+            >
+            <label
+              >Earth parking altitude · km<input
+                id="parking"
+                type="number"
+                min="0"
+                step="any"
+                value="200"
+                required
+            /></label>
+            <label
+              >Earth–Moon center distance · km<input
+                id="moondistance"
+                type="number"
+                min="1"
+                step="any"
+                value="384400"
+                required
+            /></label>
+            <label
+              >Supplied cruise duration · Earth days<input
+                id="cruisedays"
+                type="number"
+                min="0.001"
+                max="100000"
+                step="any"
+                value="3"
+                required
+            /></label>
+            <label
+              >Ascent to parking orbit · min<input
+                id="ascent"
+                type="number"
+                min="0"
+                step="any"
+                value="12"
+                required
+            /></label>
+            <label
+              >Terminal descent start height · km<input
+                id="descentheight"
+                type="number"
+                min="0.001"
+                step="any"
+                value="10"
+                required
+            /></label>
+            <label
+              >Assumed downward speed · m/s<input
+                id="downspeed"
+                type="number"
+                min="0.001"
+                step="any"
+                value="50"
+                required
+            /></label>
+            <label
+              >Assumed horizontal speed · m/s<input
+                id="horizspeed"
+                type="number"
+                min="0"
+                step="any"
+                value="10"
+                required
+            /></label>
+          </div>
+          <p id="launchdetails" class="tiny"></p>
+        </div>
+        <div class="section">
+          <div class="flight-grid">
+            <div>
+              <span class="tiny">LAUNCH TO TOUCHDOWN</span>
+              <h3 id="flighttime">—</h3>
+            </div>
+            <div>
+              <span class="tiny">ESTIMATED TOUCHDOWN · UTC</span>
+              <h3 id="touchdown">—</h3>
+            </div>
+            <div>
+              <span class="tiny">TERMINAL APPROACH ANGLE</span>
+              <h3 id="approachangle">—</h3>
+            </div>
+            <div>
+              <span class="tiny">DESTINATION SURFACE ESCAPE SPEED</span>
+              <h3 id="targetescape">—</h3>
+            </div>
+          </div>
+          <p id="timelineparts" class="tiny"></p>
+          <p id="flightstatus" class="status" aria-live="polite"></p>
+          <button id="usearrival" class="btn outline" style="margin: 14px 0">
+            Use touchdown as mission epoch ↗
+          </button>
+          <div class="note">
+            Illustrative timing, not a flight plan. Launch coordinates do not
+            alter transfer time. Ideal lunar cruise is half an Earth-centered
+            ellipse; Moon motion, alignment, capture, plane changes, staging
+            delays, and powered landing dynamics are omitted. Terminal descent
+            assumes constant entered speeds: angle = atan2(downward,
+            horizontal); 90° means vertical descent. These are not predicted
+            touchdown speeds. Mission duration starts at the mission epoch; use
+            the button to align it with estimated arrival.
+          </div>
+        </div>
+      </section>
       <div class="workspace">
         <aside class="panel">
           <div class="section">
@@ -293,5 +449,7 @@ Find water ice and collect geological samples</textarea
     <script src="app.js"></script>
     <script src="mission-model.js"></script>
     <script src="recommendations.js"></script>
+    <script src="flight-model.js"></script>
+    <script src="flight.js"></script>
   </body>
 </html>

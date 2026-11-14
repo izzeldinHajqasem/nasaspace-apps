@@ -57,3 +57,13 @@ Not affiliated with NASA. No software license is assigned by this export; the te
 The build embeds CSS and scripts for deployment; edit the readable source files instead of generated `dist/` files. The scripts load in order because recommendation controls reuse the map and mission helpers.
 
 Format the JavaScript, HTML, CSS, and Markdown with `npx --yes prettier@3.6.2 --write src/ serve.mjs tests/ README.md`.
+
+## Launch and arrival planner
+
+`src/flight-model.js` contains the pure timeline model; `src/flight.js` connects it to the page. Check it with `node tests/flight-check.mjs`.
+
+Choose an Earth launch pad or custom coordinates, UTC departure, and transfer model. The ideal lunar estimate uses `π√(a³/μEarth)`, with `a = (Earth radius + parking altitude + assumed Earth–Moon distance)/2`. This is an Earth-centered half-ellipse time to the assumed lunar distance, not a solved lunar rendezvous. Other destinations accept a supplied cruise duration. Pad coordinates do not change travel time; the displayed eastward rotation speed is context only.
+
+Total time adds the entered ascent-to-parking duration, cruise estimate, and a constant-speed terminal descent (`height/downward speed`). Descent angle is `atan2(downward speed, horizontal speed)`, measured below the local horizontal (90° is vertical). These entered speeds are not predictions of touchdown speed. Surface escape speed uses `√(2GM/r)` for the selected destination.
+
+The model omits alignment, Moon motion, staging/coast delays, capture, inclination/plane changes, atmosphere, terrain and powered landing dynamics. The terminal descent model is independent of the transfer orbit. The “Use touchdown as mission epoch” button aligns Horizons analysis and the recommendation window to the estimated arrival, rounded down to the minute. JSON export includes inputs, estimates and caveats.

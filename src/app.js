@@ -379,6 +379,7 @@ $("export").onclick = () => {
     let b = validateMissionInputs();
     let report = {
       application: "SELENE",
+      flight_plan: getFlightExport(),
       target: b[0],
       horizons_id: b[2],
       epoch_utc: $("date").value,
